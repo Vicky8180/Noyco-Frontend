@@ -1,0 +1,68 @@
+export const patientsData = [
+  {
+    id: 1,
+    name: "John Doe",
+    age: 65,
+    diagnosis: "Diabetes",
+    contact: "555-1234",
+    lastDiagnosisDate: "2023-10-01",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    age: 70,
+    diagnosis: "Hypertension",
+    contact: "555-5678",
+    lastDiagnosisDate: "2023-09-28",
+  },
+  {
+    id: 3,
+    name: "Emily Johnson",
+    age: 58,
+    diagnosis: "Diabetes",
+    contact: "555-8765",
+    lastDiagnosisDate: "2023-10-05",
+  },
+  {
+    id: 4,
+    name: "Michael Brown",
+    age: 72,
+    diagnosis: "Heart Disease",
+    contact: "555-4321",
+    lastDiagnosisDate: "2023-09-30",
+  },
+  {
+    id: 5,
+    name: "Sarah Davis",
+    age: 64,
+    diagnosis: "Diabetes",
+    contact: "555-1357",
+    lastDiagnosisDate: "2023-10-02",
+  },
+  {
+    id: 6,
+    name: "David Wilson",
+    age: 75,
+    diagnosis: "Hypertension",
+    contact: "555-2468",
+    lastDiagnosisDate: "2023-09-25",
+  },
+  {
+    id: 7,
+    name: "Laura Garcia",
+    age: 62,
+    diagnosis: "Diabetes",
+    contact: "555-3690",
+    lastDiagnosisDate: "2023-10-03",
+  },
+  {
+    id: 8,
+    name: "James Martinez",
+    age: 68,
+    diagnosis: "Heart Disease",
+    contact: "555-7890",
+    lastDiagnosisDate: "2023-09-29",
+  },
+];
+
+// export default patientsData;
