@@ -33,10 +33,9 @@ const FormComponents = {
           type="datetime-local"
           value={formatDateTime(value)}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full px-4 py-3 border transition-all"
+          className="w-full px-4 py-3 border border-accent bg-white transition-all"
           style={{
-            borderColor: 'var(--border-accent)',
-            backgroundColor: 'white',
+            
             color: 'var(--foreground)'
           }}
         />
@@ -54,11 +53,10 @@ const FormComponents = {
         type="text"
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
+        className="w-full px-4 py-3 border border-accent bg-white transition-all"
         placeholder={placeholder}
-        className="w-full px-4 py-3 border transition-all"
         style={{
-          borderColor: 'var(--border-accent)',
-          backgroundColor: 'white',
+          
           color: 'var(--foreground)'
         }}
       />
@@ -76,10 +74,9 @@ const FormComponents = {
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className="w-full px-4 py-3 border transition-all resize-none"
+           className="w-full px-4 py-3 border border-accent bg-white transition-all resize-none"
         style={{
-          borderColor: 'var(--border-accent)',
-          backgroundColor: 'white',
+          
           color: 'var(--foreground)'
         }}
       />
@@ -166,7 +163,7 @@ const FormComponents = {
           className="flex-1 h-2 appearance-none cursor-pointer slider"
           style={{
             backgroundColor: '#e5e7eb',
-            accentColor: 'var(--primary-100)'
+              accentColor: '#1f4d8f'
           }}
         />
         <span className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.6 }}>{max}</span>

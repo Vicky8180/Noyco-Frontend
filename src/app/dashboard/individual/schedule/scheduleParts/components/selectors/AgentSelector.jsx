@@ -53,13 +53,11 @@ const AgentSelector = () => {
             return (
               <div
                 key={agentKey}
-                className="relative p-3 sm:p-4 border transition-all duration-300 transform cursor-pointer"
+                className={`relative p-3 sm:p-4 bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent transition-all duration-300 transform cursor-pointer ${
+                  isSelected && !isDisabled ? 'border-blue-500 shadow-xl ring-1 ring-blue-500/20' : 'border-white/20 shadow-lg hover:border-gray-200'
+                }`}
                 style={{
-                  borderColor: isDisabled 
-                    ? '#d1d5db'
-                    : isSelected 
-                      ? 'var(--border-accent)'
-                      : '#d1d5db',
+                 
                   backgroundColor: isDisabled 
                     ? 'rgba(255, 255, 255, 0.7)'
                     : isSelected 

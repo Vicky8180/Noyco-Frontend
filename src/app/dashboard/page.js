@@ -13,14 +13,10 @@ export default function DashboardHome() {
         const user = await apiRequest("/auth/me", { suppressError: true });
         const role = user?.role;
 
-        if (role === "hospital") {
-          router.replace("/dashboard/hospital/account");
-        } else if (role === "individual") {
+       if (role === "individual") {
           router.replace("/dashboard/individual/plan");
         } else if (role === "admin") {
           router.replace("/dashboard/admin");
-        } else if (role === "assistant") {
-          router.replace("/dashboard/assistant");
         } else {
           router.replace("/");
         }

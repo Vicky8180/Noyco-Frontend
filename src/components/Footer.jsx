@@ -17,8 +17,7 @@ const footerSections = [
     links: [
       { name: "Dashboard", href: "/dashboard" },
       { name: "Admin", href: "/dashboard/admin" },
-      { name: "Hospital", href: "/dashboard/hospital" },
-      { name: "Assistant", href: "/dashboard/assistant" },
+      { name: "Individual", href: "/dashboard/individual" },
     ]
   },
   {
@@ -38,9 +37,9 @@ const footerSections = [
   {
     title: "Resources",
     links: [
-      { name: "Knowledge Base", href: "/dashboard/assistant/knowledge-base" },
       { name: "Reports", href: "/dashboard/admin/reports" },
       { name: "Analytics", href: "/dashboard/admin/analytics" },
+      { name: "Metrics", href: "/dashboard/individual/metrics" },
     ]
   },
 ];

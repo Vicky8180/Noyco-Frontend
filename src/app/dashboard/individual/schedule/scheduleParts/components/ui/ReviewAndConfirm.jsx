@@ -12,7 +12,8 @@ import {
   Sparkles, 
   Phone,
   AlertCircle,
-  Loader2
+  Loader2,
+  Heart
 } from 'lucide-react';
 
 const ReviewAndConfirm = () => {
@@ -42,13 +43,13 @@ const ReviewAndConfirm = () => {
 
   const getAgentIcon = (agentType) => {
     const agentSchemas = {
-      emotional_companion: "💝",
-      accountability_buddy: "🎯",
-      loneliness_support: "🤗",
-      therapy_checkin: "🧠",
-      social_prep: "👥"
+      emotional_companion: <Heart className="w-8 h-8" />,
+      accountability_buddy: <CheckCircle className="w-8 h-8" />,
+      loneliness_support: <User className="w-8 h-8" />,
+      therapy_checkin: <Calendar className="w-8 h-8" />,
+      social_prep: <Phone className="w-8 h-8" />
     };
-    return agentSchemas[agentType] || "🤖";
+    return agentSchemas[agentType] || <User className="w-8 h-8" />;
   };
 
   const handleSubmit = async () => {
@@ -127,10 +128,9 @@ const ReviewAndConfirm = () => {
       {/* Error Display */}
       {(submitError || scheduleError) && (
         <div 
-          className="mb-6 p-4 border flex items-center"
+          className="mb-6 p-4 bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent flex items-center shadow-lg"
           style={{ 
-            backgroundColor: '#fef2f2',
-            borderColor: '#dc2626'
+          backgroundColor: '#fef2f2'
           }}
         >
           <AlertCircle className="w-5 h-5 mr-3 flex-shrink-0" style={{ color: '#dc2626' }} />
@@ -146,11 +146,7 @@ const ReviewAndConfirm = () => {
         <div className="space-y-6">
           {/* Agent Information */}
           <div 
-            className="border p-6"
-            style={{ 
-              backgroundColor: '',
-              borderColor: 'var(--border-accent)'
-            }}
+              className="bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent p-6 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <h3 className="font-semibold mb-4 flex items-center" style={{ color: 'var(--foreground)' }}>
               <Sparkles className="w-5 h-5 mr-2" style={{ color: 'var(--primary-100)' }} />
@@ -158,7 +154,7 @@ const ReviewAndConfirm = () => {
             </h3>
             {selectedAgent ? (
               <div className="flex items-start gap-4">
-                <div className="text-3xl">{selectedAgent.icon}</div>
+                 <div className="text-gray-600">{getAgentIcon(selectedAgent.key)}</div>
                 <div>
                   <h4 className="font-medium text-lg" style={{ color: 'var(--foreground)' }}>{selectedAgent.name}</h4>
                   <p className="text-sm mt-1" style={{ color: 'var(--foreground)', opacity: 0.7 }}>{selectedAgent.description}</p>
@@ -184,11 +180,7 @@ const ReviewAndConfirm = () => {
           {/* Additional Information (for all agents) */}
           {selectedAgent && (
             <div 
-              className="border p-6"
-              style={{ 
-                backgroundColor: '',
-                borderColor: 'var(--border-accent)'
-              }}
+                 className="bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent p-6 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <h3 className="font-semibold mb-4 flex items-center" style={{ color: 'var(--foreground)' }}>
                 <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
@@ -289,11 +281,7 @@ const ReviewAndConfirm = () => {
         <div className="space-y-6">
           {/* Call Timing */}
           <div 
-            className="border p-6"
-            style={{ 
-              backgroundColor: '',
-              borderColor: 'var(--border-accent)'
-            }}
+             className="bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent p-6 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <h3 className="font-semibold mb-4 flex items-center" style={{ color: 'var(--foreground)' }}>
               <Clock className="w-5 h-5 mr-2" style={{ color: '#f97316' }} />
@@ -382,7 +370,7 @@ const ReviewAndConfirm = () => {
             actions.setStep(backStep);
           }}
           disabled={isSubmitting}
-          className="px-6 py-3 border font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+             className="px-6 py-3 bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02]"
           style={{
             borderColor: 'var(--border-accent)',
             backgroundColor: '',
@@ -405,11 +393,11 @@ const ReviewAndConfirm = () => {
         <button
           onClick={handleSubmit}
           disabled={!isReadyToSubmit() || isSubmitting}
-          className="px-8 py-3 border font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          className="px-8 py-3 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] border-accent-right border-accent-left border-accent-top border-accent font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center shadow-lg hover:shadow-xl hover:scale-[1.02]"
           style={{
             borderColor: '#10b981',
             backgroundColor: '#10b981',
-            color: ''
+            color: 'var(--foreground)'
           }}
           onMouseEnter={(e) => {
             if (!e.target.disabled) {
@@ -419,8 +407,7 @@ const ReviewAndConfirm = () => {
           }}
           onMouseLeave={(e) => {
             if (!e.target.disabled) {
-              e.target.style.backgroundColor = '#10b981';
-              e.target.style.borderColor = '#10b981';
+              e.target.style.opacity = '1';
             }
           }}
         >

@@ -26,13 +26,11 @@ export default function UnauthorizedPage() {
       return;
     }
 
-    let dashboardPath = '/dashboard/hospital';
+    let dashboardPath = '/dashboard/individual';
     if (user?.role === 'admin') {
       dashboardPath = '/dashboard/admin';
-    } else if (user?.role === 'hospital') {
-      dashboardPath = '/dashboard/hospital';
-    } else if (user?.role === 'assistant') {
-      dashboardPath = '/dashboard/assistant';
+    } else if (user?.role === 'individual') {
+      dashboardPath = '/dashboard/individual';
     }
     
     router.push(dashboardPath);

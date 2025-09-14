@@ -11,7 +11,7 @@ export function MetricCard({ title, value, subtitle, trend, icon, color = 'blue'
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-beige  p-6 border-accent-right border-accent-left border-accent-top border-accent">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
@@ -52,7 +52,7 @@ export function SystemHealthCard({ health }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100">
+    <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">System Health</h3>
         <div className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[health?.status] || statusColors.healthy}`}>

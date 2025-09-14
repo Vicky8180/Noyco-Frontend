@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSubNav } from "../layout";
 
-import ManualCallScheduling from "../data/d";
+// import ManualCallScheduling from "../data/d";
 import TrackingComponent from "./components/TrackingComponent";
 import ScheduleComponent from "./components/ScheduleComponent";
 
@@ -38,7 +38,7 @@ function SchedulePage() {
                         >
                             Back to Schedule List
                         </button>
-                        <ManualCallScheduling />
+                        {/* <ManualCallScheduling /> */}
                     </div>
                 );
             }

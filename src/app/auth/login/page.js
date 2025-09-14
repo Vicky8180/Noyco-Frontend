@@ -31,14 +31,10 @@ export default function LoginPage() {
 
         if (user?.role === 'admin') {
           router.push('/dashboard/admin');
-        } else if (user?.role === 'hospital') {
-          router.push('/dashboard/hospital');
-        } else if (user?.role === 'assistant') {
-          router.push('/dashboard/assistant');
-        } else if (user?.role === 'individual') {
+        }  else if (user?.role === 'individual') {
           router.push('/dashboard/individual');
         } else {
-          router.push('/dashboard/hospital'); // Default to hospital dashboard
+          router.push('/dashboard/individual'); // Default to individual dashboard
         }
       } else {
         setError(result.error || 'Invalid email or password. Please try again.');
