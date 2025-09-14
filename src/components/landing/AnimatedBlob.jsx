@@ -93,7 +93,7 @@ export const SidebarBlob = ({
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden lg:rounded-full rounded-lg">
       <div
-        className="absolute inset-0 lg:rounded-full rounded-lg"
+        className="absolute inset-0 lg:rounded-full rounded-lg overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, rgba(250,204,21,0.25), rgba(168,85,247,0.2), rgba(59,130,246,0.2))',
         }}

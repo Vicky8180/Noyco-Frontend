@@ -29,7 +29,7 @@ export default function MetricsDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-beige flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading your metrics...</p>
@@ -40,7 +40,7 @@ export default function MetricsDashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-beige flex items-center justify-center">
         <div className="text-center">
           <XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Unable to Load Metrics</h2>
@@ -59,9 +59,9 @@ export default function MetricsDashboardPage() {
   ];
 
   return (
-    <div className=" bg-gray-50">
+    <div className="bg-beige min-h-screen">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-beige  sticky top-0 z-10">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -108,24 +108,27 @@ export default function MetricsDashboardPage() {
 
       {/* Content */}
       <div className="p-6">
-        {activeTab === 'overview' && (
-          <OverviewTab 
-            dashboard={dashboard} 
-            onConversationSelect={setSelectedConversation}
-            onScheduleSelect={setSelectedSchedule}
-          />
-        )}
+        <div className="bg-beige border-accent-right border-accent-left border-accent-top border-accent shadow-sm">
+          <div className="p-6">
+            {activeTab === 'overview' && (
+              <OverviewTab 
+                dashboard={dashboard} 
+                onConversationSelect={setSelectedConversation}
+                onScheduleSelect={setSelectedSchedule}
+              />
+            )}
 
-        {activeTab === 'agents' && (
-          <AgentMetrics />
-        )}
+            {activeTab === 'agents' && (
+              <AgentMetrics />
+            )}
 
-        {activeTab === 'conversations' && (
-          <ConversationInsights 
-            onConversationSelect={setSelectedConversation}
-          />
-        )}
-
+            {activeTab === 'conversations' && (
+              <ConversationInsights 
+                onConversationSelect={setSelectedConversation}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -140,7 +143,7 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
   return (
     <div className="space-y-6">
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
         <MetricCard
           title="Total Conversations"
           value={analytics.total_conversations || 0}
@@ -176,7 +179,7 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-gray-100">
+        <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Conversation Analytics</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -193,7 +196,7 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-2xl p-6 border border-gray-100">
+        <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -217,10 +220,10 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
       </div>
 
       {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-beige " >
         <SystemHealthCard health={systemHealth} />
         
-        <div className="bg-white rounded-2xl p-6 border border-gray-100">
+        <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <button 

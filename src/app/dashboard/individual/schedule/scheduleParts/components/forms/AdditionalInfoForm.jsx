@@ -265,13 +265,9 @@ const AdditionalInfoForm = () => {
      
         {/* Session Selection Section */}
         {!isNewSession && (
-          <div 
-            className="border overflow-hidden"
-            style={{ 
-     
-              borderColor: 'var(--border-accent)'
-            }}
-          >
+           <div 
+           className="bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent overflow-hidden shadow-lg"
+         >
             <div 
               className="border-b px-6 py-4"
               style={{ 
@@ -298,11 +294,9 @@ const AdditionalInfoForm = () => {
                 </div>
                 <button
                   onClick={handleCreateNew}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors border"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-300 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] border-accent-right border-accent-left border-accent-top border-accent shadow-lg hover:shadow-xl hover:scale-[1.02]"
                   style={{
-                    backgroundColor: 'var(--border-accent)',
-                    color: 'white',
-                    borderColor: 'var(--border-accent)'
+                      color: 'var(--foreground)'
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.opacity = '0.9';
@@ -481,7 +475,7 @@ const AdditionalInfoForm = () => {
 
         {/* Session Creation Section */}
         {isNewSession && (
-          <div className=" backdrop-blur-sm border border-gray-200  overflow-hidden">
+            <div className="bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent overflow-hidden shadow-lg">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -499,7 +493,16 @@ const AdditionalInfoForm = () => {
                 </div>
                 <button
                   onClick={handleCancelNew}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white text-sm font-medium hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] border-accent-right border-accent-left border-accent-top border-accent text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                  style={{
+                    color: 'var(--foreground)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.opacity = '0.9';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.opacity = '1';
+                  }}
                 >
                   <X className="w-4 h-4" />
                   Cancel

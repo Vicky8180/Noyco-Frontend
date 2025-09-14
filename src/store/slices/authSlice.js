@@ -84,8 +84,8 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData, { rejectWithValue }) => {
     try {
-      const isIndividual = userData.type === 'individual';
-      const endpoint = isIndividual ? '/auth/individual/register' : '/auth/hospital/register';
+      // Only support individual registration now
+      const endpoint = '/auth/individual/register';
 
       // Create a copy without the helper field `type`
       const payload = { ...userData };
@@ -111,30 +111,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const createAssistant = createAsyncThunk(
-  'auth/createAssistant',
-  async (assistantData, { getState, rejectWithValue }) => {
-    try {
-      const { auth } = getState();
-
-      if (!auth.csrfToken) {
-        return rejectWithValue('CSRF token missing');
-      }
-
-      const data = await apiRequest('/auth/assistants', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-Token': auth.csrfToken
-        },
-        body: JSON.stringify(assistantData)
-      });
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+// createAssistant functionality removed - no longer supporting assistant creation
 
 // Global refresh lock to prevent multiple simultaneous refresh attempts
 let isRefreshingGlobal = false;

@@ -101,7 +101,7 @@ export default function AgentMetrics() {
   return (
     <div className="space-y-6">
       {/* Header with Controls */}
-      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+      <div className="bg-beige p-6   ">
         <div className="flex flex-col space-y-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Agent Goal Analytics</h2>
@@ -139,7 +139,7 @@ export default function AgentMetrics() {
               <div className="flex flex-col">
                 <label className="text-xs font-medium text-gray-600 mb-1">Agent Type</label>
                 <select 
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-beige"
                   value={selectedAgent}
                   onChange={handleAgentChange}
                 >
@@ -162,7 +162,7 @@ export default function AgentMetrics() {
                       onClick={() => handleTimeframeChange(timeframe.value)}
                       className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
                         selectedTimeframe === timeframe.value
-                          ? 'bg-white text-gray-900 shadow-sm'
+                          ? 'bg-beige text-gray-900 '
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
@@ -179,7 +179,7 @@ export default function AgentMetrics() {
 
       {!selectedAgent ? (
         /* Agent Selection Prompt */
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-8 text-center border border-blue-200">
+        <div className="'bg-beige  p-8 text-center ">
           <div className="max-w-md mx-auto">
             <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <TargetIcon className="w-8 h-8 text-white" />
@@ -197,7 +197,7 @@ export default function AgentMetrics() {
                     <button
                       key={agent.agent_type}
                       onClick={() => setSelectedAgent(agent.agent_type)}
-                      className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all group"
+                      className="flex items-center justify-between p-3 bg-beige rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all group"
                     >
                       <span className="font-medium text-gray-900 group-hover:text-blue-700">
                         {agent.display_name}
@@ -220,7 +220,7 @@ export default function AgentMetrics() {
         </div>
       ) : !agentMetrics ? (
         /* Loading State */
-        <div className="bg-white rounded-xl border border-gray-200 p-8">
+        <div className="bg-beige rounded-xl border border-gray-200 p-8">
           <div className="flex flex-col items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Loading Agent Data</h3>

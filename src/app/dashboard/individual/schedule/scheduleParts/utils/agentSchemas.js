@@ -1,8 +1,9 @@
+import { Heart, Target, Users, Brain, Phone } from 'lucide-react';
 export const agentSchemas = {
   emotional_companion: {
     name: "Emotional Companion",
     description: "A supportive agent focused on emotional well-being and meaningful conversations",
-    icon: "💝",
+    icon: <Heart className="w-6 h-6 text-gray-600" />,
     fields: {
       topics_user_enjoys: {
         type: "array",
@@ -30,7 +31,7 @@ export const agentSchemas = {
   accountability_buddy: {
     name: "Accountability Buddy",
     description: "Stay on track with your goals through regular check-ins and motivation",
-    icon: "🎯",
+    icon: <Target className="w-6 h-6 text-gray-600" />,
     fields: {
       goal_statement: {
         type: "string",
@@ -65,7 +66,7 @@ export const agentSchemas = {
   loneliness_support: {
     name: "Loneliness Support",
     description: "Companionship and emotional support for those feeling isolated",
-    icon: "🤗",
+    icon: <Users className="w-6 h-6 text-gray-600" />,
     fields: {
       conversation_topics: {
         type: "array",
@@ -93,7 +94,7 @@ export const agentSchemas = {
   therapy_checkin: {
     name: "Therapy Check-In",
     description: "Mental health support with mood tracking and therapeutic activities",
-    icon: "🧠",
+    icon: <Brain className="w-6 h-6 text-gray-600" />,
     fields: {
       mood_tracking_method: {
         type: "select",
@@ -121,7 +122,7 @@ export const agentSchemas = {
   social_prep: {
     name: "Social Anxiety Prep",
     description: "Preparation and support for social situations and events",
-    icon: "👥",
+    icon: <Phone className="w-6 h-6 text-gray-600" />,
     fields: {
       event_type: {
         type: "string",

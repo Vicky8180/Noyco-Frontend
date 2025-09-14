@@ -1,21 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { API_BASE_URL } from '../lib/constant';
 import { apiRequest } from '../lib/api';
 import {
   login as loginAction,
   logout as logoutAction,
   registerUser as registerUserAction,
-  createAssistant as createAssistantAction,
   checkAuthStatus as checkAuthStatusAction,
   refreshToken as refreshTokenAction
 } from './slices/authSlice';
-import {
-  fetchAssistants,
-  fetchAssistant,
-  createAssistant,
-  updateAssistant,
-  deleteAssistant
-} from './api-thunk/userAPI';
-import { clearError, setCurrentAssistant, clearCurrentAssistant } from './slices/assistantSlice';
 import {
   createAgentProfile,
   fetchAgentProfiles,
@@ -88,15 +80,7 @@ export const useAuth = () => {
     }
   };
 
-  // Create assistant function
-  const createAssistant = async (assistantData) => {
-    try {
-      const assistant = await dispatch(createAssistantAction(assistantData)).unwrap();
-      return { success: true, assistant };
-    } catch (error) {
-      return { success: false, error };
-    }
-  };
+  // createAssistant functionality removed - no longer supporting assistant creation
 
   // OTP functions
   const sendOTP = async (email) => {
@@ -175,93 +159,12 @@ export const useAuth = () => {
     login,
     logout,
     registerUser,
-    createAssistant,
     sendOTP,
     verifyOTP,
     checkAuthStatus,
     refreshAuthToken,
     updateProfile,
     updatePassword
-  };
-};
-
-export const useAssistants = () => {
-  const dispatch = useDispatch();
-  const { assistants, currentAssistant, loading, error } = useSelector((state) => state.assistant);
-
-  // Get all assistants
-  const getAllAssistants = async () => {
-    try {
-      const result = await dispatch(fetchAssistants()).unwrap();
-      return { success: true, assistants: result };
-    } catch (error) {
-      return { success: false, error };
-    }
-  };
-
-  // Get assistant by ID
-  const getAssistant = async (assistantId) => {
-    try {
-      const result = await dispatch(fetchAssistant(assistantId)).unwrap();
-      dispatch(setCurrentAssistant(result));
-      return { success: true, assistant: result };
-    } catch (error) {
-      return { success: false, error };
-    }
-  };
-
-  // Create new assistant
-  const addAssistant = async (assistantData) => {
-    try {
-      const result = await dispatch(createAssistant(assistantData)).unwrap();
-      return { success: true, assistant: result };
-    } catch (error) {
-      return { success: false, error };
-    }
-  };
-
-  // Update assistant
-  const editAssistant = async (assistantId, assistantData) => {
-    try {
-      const result = await dispatch(updateAssistant({ assistantId, assistantData })).unwrap();
-      return { success: true, assistant: result };
-    } catch (error) {
-      return { success: false, error };
-    }
-  };
-
-  // Delete assistant
-  const removeAssistant = async (assistantId) => {
-    try {
-      await dispatch(deleteAssistant(assistantId)).unwrap();
-      return { success: true };
-    } catch (error) {
-      return { success: false, error };
-    }
-  };
-
-  // Clear current assistant
-  const clearAssistant = () => {
-    dispatch(clearCurrentAssistant());
-  };
-
-  // Clear error
-  const resetError = () => {
-    dispatch(clearError());
-  };
-
-  return {
-    assistants,
-    currentAssistant,
-    loading,
-    error,
-    getAllAssistants,
-    getAssistant,
-    addAssistant,
-    editAssistant,
-    removeAssistant,
-    clearAssistant,
-    resetError
   };
 };
 
@@ -540,7 +443,8 @@ export const useAgentMetrics = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  // Import API_BASE_URL from constants instead of redefining
+  // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
   // Fetch available agent types with statistics
   const fetchAgentTypes = async () => {

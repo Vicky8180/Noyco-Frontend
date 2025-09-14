@@ -147,11 +147,9 @@ const IntegratedFlowWizard = () => {
 
         {/* Step Content */}
         <div 
-          className="border overflow-hidden"
-          style={{ 
-      
-            borderColor: 'var(--border-accent)' 
-          }}
+         className="bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent overflow-hidden shadow-lg"
+
+
         >
           <div className="p-8">
             {isLoading ? (
@@ -172,9 +170,9 @@ const IntegratedFlowWizard = () => {
 
           {/* Navigation Footer */}
           <div 
-            className="px-8 py-4 border-t"
+            className="px-8 py-4 border-t bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]"
             style={{ 
-              backgroundColor: 'var(--beige)', 
+              
               borderTopColor: 'var(--border-accent)' 
             }}
           >
@@ -182,7 +180,7 @@ const IntegratedFlowWizard = () => {
               <button
                 onClick={handlePrevious}
                 disabled={currentStep === 1}
-                className="inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center px-4 py-2 bg-beige backdrop-blur-xl border-accent-right border-accent-left border-accent-top border-accent text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02]"
                 style={{
                   borderColor: 'var(--border-accent)',
                   backgroundColor: 'white',
@@ -211,10 +209,9 @@ const IntegratedFlowWizard = () => {
                 <button
                   onClick={handleNext}
                   disabled={!isCurrentStepValid()}
-                  className="inline-flex items-center px-6 py-2 border text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                   className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] border-accent-right border-accent-left border-accent-top border-accent text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02]"
                   style={{
-                    borderColor: 'var(--primary-100)',
-                    backgroundColor: 'var(--primary-100)',
+                   
                     color: 'var(--foreground)'
                   }}
                   onMouseEnter={(e) => {

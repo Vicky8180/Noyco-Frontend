@@ -271,301 +271,419 @@
 //   );
 // }
 
+// 'use client';
+
+// import { useState, useEffect } from 'react';
+// import { ChevronLeft, ChevronRight, Star, Play, Heart, Zap, Moon, Brain, Sparkles } from 'lucide-react';
+
+// export default function TestimonialsSection() {
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [isAnimating, setIsAnimating] = useState(false);
+
+//   const testimonials = [
+//     {
+//       id: 1,
+//       text: "Noyco transformed my chaotic mornings into moments of pure zen. The guided breathing exercises feel like a warm hug for my soul.",
+//       author: "Maya Chen",
+//       role: "Creative Director",
+//       company: "Adobe",
+//       avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
+//       rating: 5,
+//       category: "Morning Ritual",
+//       icon: <Sparkles className="w-5 h-5" />,
+//       gradient: "from-orange-400 to-pink-400",
+//       bgColor: "bg-orange-50"
+//     },
+//     {
+//       id: 2,
+//       text: "The sleep stories are magical! I drift off within minutes, and wake up feeling like I've been recharged by nature itself.",
+//       author: "James Rodriguez",
+//       role: "Product Manager", 
+//       company: "Spotify",
+//       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
+//       rating: 5,
+//       category: "Better Sleep",
+//       icon: <Moon className="w-5 h-5" />,
+//       gradient: "from-purple-400 to-indigo-500",
+//       bgColor: "bg-purple-50"
+//     },
+//     {
+//       id: 3,
+//       text: "My anxiety melted away after just one week. Noyco gave me tools I never knew I needed – it's like therapy in my pocket.",
+//       author: "Sarah Thompson",
+//       role: "Wellness Coach",
+//       company: "Mindful Living",
+//       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
+//       rating: 5,
+//       category: "Stress Relief",
+//       icon: <Heart className="w-5 h-5" />,
+//       gradient: "from-green-400 to-blue-500",
+//       bgColor: "bg-green-50"
+//     },
+//     {
+//       id: 4,
+//       text: "Focus mode is incredible! I've never been able to concentrate this deeply. It's like upgrading my brain's operating system.",
+//       author: "David Park",
+//       role: "Software Engineer",
+//       company: "Tesla",
+//       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
+//       rating: 5,
+//       category: "Deep Focus",
+//       icon: <Brain className="w-5 h-5" />,
+//       gradient: "from-blue-400 to-cyan-400",
+//       bgColor: "bg-blue-50"
+//     },
+//     {
+//       id: 5,
+//       text: "The energy sessions give me superpowers! I start each day feeling unstoppable and ready to conquer anything.",
+//       author: "Lisa Wang",
+//       role: "Entrepreneur",
+//       company: "TechFlow",
+//       avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
+//       rating: 5,
+//       category: "Energy Boost",
+//       icon: <Zap className="w-5 h-5" />,
+//       gradient: "from-yellow-400 to-orange-500",
+//       bgColor: "bg-yellow-50"
+//     },
+//     {
+//       id: 6,
+//       text: "Noyco is my daily dose of happiness. Each session fills me with gratitude and joy that radiates throughout my entire day.",
+//       author: "Michael Chen",
+//       role: "Life Coach",
+//       company: "Mindset Masters",
+//       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
+//       rating: 5,
+//       category: "Daily Joy",
+//       icon: <Sparkles className="w-5 h-5" />,
+//       gradient: "from-pink-400 to-rose-400",
+//       bgColor: "bg-pink-50"
+//     }
+//   ];
+
+//   const nextSlide = () => {
+//     if (isAnimating) return;
+//     setIsAnimating(true);
+//     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+//     setTimeout(() => setIsAnimating(false), 600);
+//   };
+
+//   const prevSlide = () => {
+//     if (isAnimating) return;
+//     setIsAnimating(true);
+//     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+//     setTimeout(() => setIsAnimating(false), 600);
+//   };
+
+//   useEffect(() => {
+//     const interval = setInterval(nextSlide, 8000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const getVisibleTestimonials = () => {
+//     const result = [];
+//     for (let i = 0; i < 3; i++) {
+//       result.push(testimonials[(currentIndex + i) % testimonials.length]);
+//     }
+//     return result;
+//   };
+
+//   const visibleTestimonials = getVisibleTestimonials();
+
+//   return (
+//     <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden relative">
+//       {/* Background Elements */}
+//       <div className="absolute inset-0">
+//         <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-orange-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
+//         <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-blue-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
+//         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-green-200/20 to-blue-200/20 rounded-full blur-3xl"></div>
+//       </div>
+
+//       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+//         {/* Header */}
+//         <div className="text-center mb-16">
+//           <div className="inline-flex items-center bg-gradient-to-r from-orange-400 to-pink-400 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+//             <Heart className="w-4 h-4 mr-2" />
+//             Loved by millions worldwide
+//           </div>
+//           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+//             Life-changing stories from our
+//             <span className="bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"> community</span>
+//           </h2>
+//           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+//             Real people sharing how Noyco transformed their daily wellness journey into something extraordinary
+//           </p>
+//         </div>
+
+//         {/* Main Testimonial Carousel */}
+//         <div className="relative mb-12">
+//           <div className="grid lg:grid-cols-3 gap-6">
+//             {visibleTestimonials.map((testimonial, index) => (
+//               <div
+//                 key={`${testimonial.id}-${currentIndex}`}
+//                 className={`group ${testimonial.bgColor} rounded-2xl p-6 relative overflow-hidden transform transition-all duration-700 hover:scale-105 hover:shadow-2xl ${
+//                   index === 1 ? 'lg:scale-105 lg:shadow-xl' : ''
+//                 } ${isAnimating ? 'animate-pulse' : ''}`}
+//                 style={{
+//                   animationDelay: `${index * 200}ms`
+//                 }}
+//               >
+//                 {/* Background Gradient */}
+//                 <div className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                
+//                 {/* Category Badge */}
+//                 <div className={`inline-flex items-center bg-gradient-to-r ${testimonial.gradient} text-white px-3 py-1 rounded-full text-sm font-medium mb-6`}>
+//                   {testimonial.icon}
+//                   <span className="ml-2">{testimonial.category}</span>
+//                 </div>
+
+//                 {/* Rating */}
+//                 <div className="flex items-center mb-4">
+//                   {[...Array(testimonial.rating)].map((_, i) => (
+//                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+//                   ))}
+//                 </div>
+
+//                 {/* Testimonial Text */}
+//                 <blockquote className="text-gray-800 mb-6 text-base leading-relaxed font-medium">
+//                   "{testimonial.text}"
+//                 </blockquote>
+
+//                 {/* Author Info */}
+//                 <div className="flex items-center">
+//                   <div className="relative">
+//                     <img
+//                       src={testimonial.avatar}
+//                       alt={testimonial.author}
+//                       className="w-12 h-12 rounded-full object-cover border-3 border-white shadow-lg"
+//                     />
+//                     <div className={`absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r ${testimonial.gradient} rounded-full flex items-center justify-center`}>
+//                       <Play className="w-3 h-3 text-white fill-current" />
+//                     </div>
+//                   </div>
+//                   <div className="ml-4">
+//                     <div className="font-bold text-gray-900">
+//                       {testimonial.author}
+//                     </div>
+//                     <div className="text-gray-600 text-sm">
+//                       {testimonial.role} at {testimonial.company}
+//                     </div>
+//                   </div>
+//                 </div>
+
+//                 {/* Hover effect */}
+//                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+//                   <div className={`w-12 h-12 bg-gradient-to-r ${testimonial.gradient} rounded-full flex items-center justify-center shadow-lg`}>
+//                     <Sparkles className="w-6 h-6 text-white" />
+//                   </div>
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+
+//           {/* Navigation */}
+//           <div className="flex items-center justify-center mt-12 space-x-6">
+//             <button
+//               onClick={prevSlide}
+//               disabled={isAnimating}
+//               className="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50 disabled:opacity-50 border border-gray-100"
+//             >
+//               <ChevronLeft className="w-6 h-6 text-gray-700" />
+//             </button>
+
+//             {/* Dots */}
+//             <div className="flex space-x-3">
+//               {testimonials.map((_, index) => (
+//                 <button
+//                   key={index}
+//                   onClick={() => {
+//                     if (!isAnimating) {
+//                       setIsAnimating(true);
+//                       setCurrentIndex(index);
+//                       setTimeout(() => setIsAnimating(false), 600);
+//                     }
+//                   }}
+//                   className={`w-4 h-4 rounded-full transition-all duration-300 ${
+//                     index === currentIndex 
+//                       ? 'bg-gradient-to-r from-orange-400 to-pink-400 scale-125 shadow-lg' 
+//                       : 'bg-gray-300 hover:bg-gray-400'
+//                   }`}
+//                 />
+//               ))}
+//             </div>
+
+//             <button
+//               onClick={nextSlide}
+//               disabled={isAnimating}
+//               className="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50 disabled:opacity-50 border border-gray-100"
+//             >
+//               <ChevronRight className="w-6 h-6 text-gray-700" />
+//             </button>
+//           </div>
+//         </div>
+
+//         {/* Stats */}
+//         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-12">
+//   {[
+//     { number: "10M+", label: "Happy Users", icon: <Heart className="w-6 h-6" />, gradient: "from-pink-400 to-rose-400" },
+//     { number: "4.9★", label: "App Rating", icon: <Star className="w-6 h-6" />, gradient: "from-yellow-400 to-orange-400" },
+//     { number: "500M+", label: "Minutes Meditated", icon: <Brain className="w-6 h-6" />, gradient: "from-blue-400 to-indigo-400" },
+//     { number: "98%", label: "Feel Better", icon: <Sparkles className="w-6 h-6" />, gradient: "from-purple-400 to-pink-400" }
+//   ].map((stat, index) => (
+//     <div key={index} className="text-center group">
+//       <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+//         <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${stat.gradient} rounded-xl mb-2 text-white group-hover:scale-110 transition-transform duration-300`}>
+//           {stat.icon}
+//         </div>
+//         <div className={`text-2xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
+//           {stat.number}
+//         </div>
+//         <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+//       </div>
+//     </div>
+//   ))}
+// </div>
+
+//         {/* Call to Action */}
+//         <div className="text-center">
+//           <div className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-500 rounded-2xl p-8 text-white relative overflow-hidden">
+//             <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+//             <div className="relative z-10">
+//               <h3 className="text-2xl lg:text-3xl font-bold mb-4">
+//                 Your transformation starts today
+//               </h3>
+//               <p className="text-lg mb-6 max-w-xl mx-auto opacity-90">
+//                 Join millions who've discovered inner peace, better sleep, and unstoppable focus with Noyco
+//               </p>
+//               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+//                 <button className="bg-white text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center">
+//                   <Play className="w-5 h-5 mr-2 fill-current" />
+//                   Start Free Trial
+//                 </button>
+//                 <button className="border-2 border-white/30 text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors duration-200 backdrop-blur-sm">
+//                   Watch Demo
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star, Play, Heart, Zap, Moon, Brain, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function TestimonialsSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
   const testimonials = [
     {
       id: 1,
-      text: "Noyco transformed my chaotic mornings into moments of pure zen. The guided breathing exercises feel like a warm hug for my soul.",
+      text: "Noyco helped me finally find balance in my mornings. I start the day calm, centered, and ready.",
       author: "Maya Chen",
       role: "Creative Director",
-      company: "Adobe",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
-      rating: 5,
-      category: "Morning Ritual",
-      icon: <Sparkles className="w-5 h-5" />,
-      gradient: "from-orange-400 to-pink-400",
-      bgColor: "bg-orange-50"
+      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     },
     {
       id: 2,
-      text: "The sleep stories are magical! I drift off within minutes, and wake up feeling like I've been recharged by nature itself.",
+      text: "The sleep stories are magical. I’ve struggled with insomnia for years, and this has been life-changing.",
       author: "James Rodriguez",
-      role: "Product Manager", 
-      company: "Spotify",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
-      rating: 5,
-      category: "Better Sleep",
-      icon: <Moon className="w-5 h-5" />,
-      gradient: "from-purple-400 to-indigo-500",
-      bgColor: "bg-purple-50"
+      role: "Product Manager",
+      avatar: "https://randomuser.me/api/portraits/men/46.jpg",
     },
     {
       id: 3,
-      text: "My anxiety melted away after just one week. Noyco gave me tools I never knew I needed – it's like therapy in my pocket.",
+      text: "As a coach, I recommend Noyco to all my clients. It’s like therapy in your pocket.",
       author: "Sarah Thompson",
       role: "Wellness Coach",
-      company: "Mindful Living",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
-      rating: 5,
-      category: "Stress Relief",
-      icon: <Heart className="w-5 h-5" />,
-      gradient: "from-green-400 to-blue-500",
-      bgColor: "bg-green-50"
+      avatar: "https://randomuser.me/api/portraits/women/65.jpg",
     },
     {
       id: 4,
-      text: "Focus mode is incredible! I've never been able to concentrate this deeply. It's like upgrading my brain's operating system.",
+      text: "Focus mode is incredible. My productivity skyrocketed after I started using it.",
       author: "David Park",
       role: "Software Engineer",
-      company: "Tesla",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
-      rating: 5,
-      category: "Deep Focus",
-      icon: <Brain className="w-5 h-5" />,
-      gradient: "from-blue-400 to-cyan-400",
-      bgColor: "bg-blue-50"
+      avatar: "https://randomuser.me/api/portraits/men/52.jpg",
     },
     {
       id: 5,
-      text: "The energy sessions give me superpowers! I start each day feeling unstoppable and ready to conquer anything.",
+      text: "Daily gratitude reminders uplift my mood instantly. Such a beautiful experience every time.",
       author: "Lisa Wang",
       role: "Entrepreneur",
-      company: "TechFlow",
-      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
-      rating: 5,
-      category: "Energy Boost",
-      icon: <Zap className="w-5 h-5" />,
-      gradient: "from-yellow-400 to-orange-500",
-      bgColor: "bg-yellow-50"
+      avatar: "https://randomuser.me/api/portraits/women/32.jpg",
     },
     {
       id: 6,
-      text: "Noyco is my daily dose of happiness. Each session fills me with gratitude and joy that radiates throughout my entire day.",
+      text: "The meditation sessions helped me reduce stress during tough deadlines at work.",
       author: "Michael Chen",
       role: "Life Coach",
-      company: "Mindset Masters",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&w=120&h=120&fit=crop&crop=face&auto=format",
-      rating: 5,
-      category: "Daily Joy",
-      icon: <Sparkles className="w-5 h-5" />,
-      gradient: "from-pink-400 to-rose-400",
-      bgColor: "bg-pink-50"
-    }
+      avatar: "https://randomuser.me/api/portraits/men/41.jpg",
+    },
   ];
 
-  const nextSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    setTimeout(() => setIsAnimating(false), 600);
-  };
-
-  const prevSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    setTimeout(() => setIsAnimating(false), 600);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(nextSlide, 8000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const getVisibleTestimonials = () => {
-    const result = [];
-    for (let i = 0; i < 3; i++) {
-      result.push(testimonials[(currentIndex + i) % testimonials.length]);
-    }
-    return result;
-  };
-
-  const visibleTestimonials = getVisibleTestimonials();
-
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden relative">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-orange-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-blue-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-green-200/20 to-blue-200/20 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="py-20 bg-white relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center bg-gradient-to-r from-orange-400 to-pink-400 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Heart className="w-4 h-4 mr-2" />
-            Loved by millions worldwide
-          </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Life-changing stories from our
-            <span className="bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"> community</span>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            What people are saying
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Real people sharing how Noyco transformed their daily wellness journey into something extraordinary
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Real stories from our community who use Noyco to sleep better, stress less, and live more mindfully.
           </p>
         </div>
 
-        {/* Main Testimonial Carousel */}
-        <div className="relative mb-12">
-          <div className="grid lg:grid-cols-3 gap-6">
-            {visibleTestimonials.map((testimonial, index) => (
-              <div
-                key={`${testimonial.id}-${currentIndex}`}
-                className={`group ${testimonial.bgColor} rounded-2xl p-6 relative overflow-hidden transform transition-all duration-700 hover:scale-105 hover:shadow-2xl ${
-                  index === 1 ? 'lg:scale-105 lg:shadow-xl' : ''
-                } ${isAnimating ? 'animate-pulse' : ''}`}
-                style={{
-                  animationDelay: `${index * 200}ms`
-                }}
-              >
-                {/* Background Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                
-                {/* Category Badge */}
-                <div className={`inline-flex items-center bg-gradient-to-r ${testimonial.gradient} text-white px-3 py-1 rounded-full text-sm font-medium mb-6`}>
-                  {testimonial.icon}
-                  <span className="ml-2">{testimonial.category}</span>
-                </div>
-
-                {/* Rating */}
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-
-                {/* Testimonial Text */}
-                <blockquote className="text-gray-800 mb-6 text-base leading-relaxed font-medium">
-                  "{testimonial.text}"
-                </blockquote>
-
-                {/* Author Info */}
-                <div className="flex items-center">
-                  <div className="relative">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.author}
-                      className="w-12 h-12 rounded-full object-cover border-3 border-white shadow-lg"
-                    />
-                    <div className={`absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r ${testimonial.gradient} rounded-full flex items-center justify-center`}>
-                      <Play className="w-3 h-3 text-white fill-current" />
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <div className="font-bold text-gray-900">
-                      {testimonial.author}
-                    </div>
-                    <div className="text-gray-600 text-sm">
-                      {testimonial.role} at {testimonial.company}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hover effect */}
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${testimonial.gradient} rounded-full flex items-center justify-center shadow-lg`}>
-                    <Sparkles className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center mt-12 space-x-6">
-            <button
-              onClick={prevSlide}
-              disabled={isAnimating}
-              className="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50 disabled:opacity-50 border border-gray-100"
+        {/* Testimonials Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+          {testimonials.map((t, idx) => (
+            <motion.div
+              key={t.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition"
             >
-              <ChevronLeft className="w-6 h-6 text-gray-700" />
-            </button>
-
-            {/* Dots */}
-            <div className="flex space-x-3">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    if (!isAnimating) {
-                      setIsAnimating(true);
-                      setCurrentIndex(index);
-                      setTimeout(() => setIsAnimating(false), 600);
-                    }
-                  }}
-                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                    index === currentIndex 
-                      ? 'bg-gradient-to-r from-orange-400 to-pink-400 scale-125 shadow-lg' 
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
+              <blockquote className="text-gray-700 mb-6 leading-relaxed">“{t.text}”</blockquote>
+              <div className="flex items-center">
+                <img
+                  src={t.avatar}
+                  alt={t.author}
+                  className="w-12 h-12 rounded-full object-cover"
                 />
-              ))}
-            </div>
-
-            <button
-              onClick={nextSlide}
-              disabled={isAnimating}
-              className="p-4 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50 disabled:opacity-50 border border-gray-100"
-            >
-              <ChevronRight className="w-6 h-6 text-gray-700" />
-            </button>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-12">
-  {[
-    { number: "10M+", label: "Happy Users", icon: <Heart className="w-6 h-6" />, gradient: "from-pink-400 to-rose-400" },
-    { number: "4.9★", label: "App Rating", icon: <Star className="w-6 h-6" />, gradient: "from-yellow-400 to-orange-400" },
-    { number: "500M+", label: "Minutes Meditated", icon: <Brain className="w-6 h-6" />, gradient: "from-blue-400 to-indigo-400" },
-    { number: "98%", label: "Feel Better", icon: <Sparkles className="w-6 h-6" />, gradient: "from-purple-400 to-pink-400" }
-  ].map((stat, index) => (
-    <div key={index} className="text-center group">
-      <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-        <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${stat.gradient} rounded-xl mb-2 text-white group-hover:scale-110 transition-transform duration-300`}>
-          {stat.icon}
-        </div>
-        <div className={`text-2xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
-          {stat.number}
-        </div>
-        <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-      </div>
-    </div>
-  ))}
-</div>
-
-        {/* Call to Action */}
-        <div className="text-center">
-          <div className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-500 rounded-2xl p-8 text-white relative overflow-hidden">
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-            <div className="relative z-10">
-              <h3 className="text-2xl lg:text-3xl font-bold mb-4">
-                Your transformation starts today
-              </h3>
-              <p className="text-lg mb-6 max-w-xl mx-auto opacity-90">
-                Join millions who've discovered inner peace, better sleep, and unstoppable focus with Noyco
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button className="bg-white text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center">
-                  <Play className="w-5 h-5 mr-2 fill-current" />
-                  Start Free Trial
-                </button>
-                <button className="border-2 border-white/30 text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors duration-200 backdrop-blur-sm">
-                  Watch Demo
-                </button>
+                <div className="ml-4">
+                  <div className="font-semibold text-gray-900">{t.author}</div>
+                  <div className="text-gray-500 text-sm">{t.role}</div>
+                </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="relative bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-10 text-center text-white shadow-xl">
+          <h3 className="text-2xl font-bold mb-4">
+            Ready to transform your mind?
+          </h3>
+          <p className="mb-6 text-lg opacity-90">
+            Start your journey to better sleep, deeper focus, and lasting peace.
+          </p>
+          <button className="bg-white text-blue-600 font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition">
+            Start Free Trial
+          </button>
         </div>
       </div>
     </section>

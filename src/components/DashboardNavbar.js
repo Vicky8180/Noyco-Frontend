@@ -13,8 +13,8 @@ export default function DashboardNavbar() {
   const getDashboardHome = () => {
     if (!user) return "/dashboard";
     if (user.role === "admin") return "/dashboard/admin";
-    if (user.role === "assistant") return "/dashboard/assistant";
-    return "/dashboard/hospital";
+    if (user.role === "individual") return "/dashboard/individual";
+    return "/dashboard/individual"; // Default to individual dashboard
   };
 
   const handleLogout = async () => {

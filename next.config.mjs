@@ -23,62 +23,56 @@ const nextConfig = {
     return config;
   },
   async rewrites() {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    
     return [
       {
         source: '/auth/:path*',
-        destination: 'http://localhost:8000/auth/:path*',
+        destination: `${API_URL}/auth/:path*`,
       },
       {
         source: '/api/:path*',
-        destination: 'http://localhost:8000/api/:path*',
+        destination: `${API_URL}/api/:path*`,
       },
       {
         source: '/dataEHR/:path*',
-        destination: 'http://localhost:8000/dataEHR/:path*',
+        destination: `${API_URL}/dataEHR/:path*`,
       },
       {
         source: '/billing/:path*',
-        destination: 'http://localhost:8000/billing/:path*',
+        destination: `${API_URL}/billing/:path*`,
       },
       {
         source: '/phone/:path*',
-        destination: 'http://localhost:8000/phone/:path*',
-      },
-      {
-        source: '/individual/mediscan/:path*',
-        destination: 'http://localhost:8000/individual/mediscan/:path*',
+        destination: `${API_URL}/phone/:path*`,
       },
       {
         source: '/patients/:path*',
-        destination: 'http://localhost:8000/patients/:path*',
+        destination: `${API_URL}/patients/:path*`,
       },
       {
         source: '/user-profile/:path*',
-        destination: 'http://localhost:8000/user-profile/:path*',
+        destination: `${API_URL}/user-profile/:path*`,
       },
       {
         source: '/stripe/:path*',
-        destination: 'http://localhost:8000/stripe/:path*',
+        destination: `${API_URL}/stripe/:path*`,
       },
       {
         source: '/tracking/:path*',
-        destination: 'http://localhost:8000/tracking/:path*',
+        destination: `${API_URL}/tracking/:path*`,
       },
       {
         source: '/schedule/:path*',
-        destination: 'http://localhost:8000/schedule/:path*',
+        destination: `${API_URL}/schedule/:path*`,
       },
       {
         source: '/schedule/tracking/:path*',
-        destination: 'http://localhost:8000/schedule/tracking/:path*',
+        destination: `${API_URL}/schedule/tracking/:path*`,
       },
       {
         source: '/metrics/:path*',
-        destination: 'http://localhost:8000/metrics/:path*',
-      },
-      {
-        source: '/user-profile/:path*',
-        destination: 'http://localhost:8000/user-profile/:path*',
+        destination: `${API_URL}/metrics/:path*`,
       },
     ];
   },

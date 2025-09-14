@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/store/hooks';
-import AnimatedBlob from '@/components/AnimatedBlob';
+import { User, Bell, Shield, Settings } from 'lucide-react';
+import AnimatedBlob from '@/components/landing/AnimatedBlob';
 
 export default function SettingsPage() {
   const { user, updateProfile, updatePassword } = useAuth();
@@ -106,10 +107,10 @@ export default function SettingsPage() {
   };
 
   const tabs = [
-    { id: 'profile', name: 'Profile', icon: '👤' },
-    { id: 'notifications', name: 'Notifications', icon: '🔔' },
-    { id: 'privacy', name: 'Privacy', icon: '🔒' },
-    { id: 'preferences', name: 'Preferences', icon: '⚙️' }
+    { id: 'profile', name: 'Profile', icon: User },
+    { id: 'notifications', name: 'Notifications', icon: Bell },
+    { id: 'privacy', name: 'Privacy', icon: Shield },
+    { id: 'preferences', name: 'Preferences', icon: Settings }
   ];
 
   const renderProfileTab = () => (
@@ -331,7 +332,7 @@ export default function SettingsPage() {
                         : 'text-gray-700 hover:bg-beige'
                     }`}
                   >
-                    <span className="mr-2 text-lg">{tab.icon}</span>
+                    <tab.icon className="mr-2 w-5 h-5" />
                     {tab.name}
                   </button>
                 ))}
@@ -351,7 +352,7 @@ export default function SettingsPage() {
                         : 'text-gray-700 hover:bg-beige hover:shadow-sm'
                     }`}
                   >
-                    <span className="mr-3 text-lg">{tab.icon}</span>
+                    <tab.icon className="mr-3 w-5 h-5" />
                     {tab.name}
                   </button>
                 ))}
