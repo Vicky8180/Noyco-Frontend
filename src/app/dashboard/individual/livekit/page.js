@@ -3,15 +3,15 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Room, RemoteTrack, RoomEvent, ConnectionState, createLocalAudioTrack } from 'livekit-client';
-
+import { useAuth, useAgentProfile } from '../../../../store/hooks';
 import { motion } from 'framer-motion';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import { secondsInDay } from 'date-fns/constants';
 
-const RecordButton = ({ isRecording, startVoiceAssistant, stopVoiceAssistant }) => {
+const RecordButton = ({ isRecording, handleVoiceToggle }) => {
   return (
     <motion.button
-      onClick={isRecording ? stopVoiceAssistant : startVoiceAssistant}
+      onClick={handleVoiceToggle}
       className="relative flex items-center justify-center text-white shadow-2xl px-10 py-10 sm:px-12 sm:py-12 lg:px-14 lg:py-14 transition-all duration-300"
       style={{
         background: isRecording
@@ -60,10 +60,10 @@ const RecordButton = ({ isRecording, startVoiceAssistant, stopVoiceAssistant }) 
 };
 
 
-const AmebaButton = ({ isRecording, startVoiceAssistant, stopVoiceAssistant }) => {
+const AmebaButton = ({ isRecording, handleVoiceToggle }) => {
   return (
  <motion.button
-  onClick={isRecording ? stopVoiceAssistant : startVoiceAssistant}
+  onClick={handleVoiceToggle}
   className="relative flex items-center justify-center text-white shadow-2xl px-12 py-12 lg:px-14 lg:py-14 transition-all"
   style={{
     background: isRecording
@@ -105,6 +105,10 @@ const AmebaButton = ({ isRecording, startVoiceAssistant, stopVoiceAssistant }) =
 
 // Voice Assistant with synchronized typing and speaking
 const ImprovedVoiceAssistant = () => {
+  // Redux hooks for user and profile data
+  const { user, isAuthenticated } = useAuth();
+  const { profiles, currentProfile, fetchProfiles, isLoading: profilesLoading } = useAgentProfile();
+
   const [isRecording, setIsRecording] = useState(false);
   const [sessionData, setSessionData] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
@@ -166,23 +170,80 @@ const ImprovedVoiceAssistant = () => {
     }
   }, []);
 
-  // Session configuration
-  const sessionConfig = {
-    conversation_id: 'voice_conversation_' + Date.now(),
-    individual_id: 'individual_f068689a7d96',
-    user_profile_id: 'user_profile_610f7db5658e',
-    detected_agent: 'loneliness',
-    agent_instance_id: 'loneliness_658',
-    call_log_id: 'call_log_voice_' + Date.now(),
-    participant_name: 'voice_user_' + Math.random().toString(36).substr(2, 9),
-    voice_settings: {
-      vad_enabled: true,
-      echo_cancellation: true,
-      noise_suppression: true,
-      auto_gain_control: true,
-      sample_rate: 16000,
-      interruption_enabled: true
+  // Debug profile loading state and update session when profile loads
+  useEffect(() => {
+    console.log('Profile state changed:', {
+      user: user?.role_entity_id,
+      profilesLoading,
+      profilesCount: profiles?.length || 0,
+      currentProfile: currentProfile?.user_profile_id,
+      isAuthenticated
+    });
+    
+    // If we have a session running with fallback profile and now have real profile, update it
+    const activeProfile = currentProfile || (profiles && profiles.length > 0 ? profiles[0] : null);
+    if (sessionDataRef.current && activeProfile && sessionDataRef.current.user_profile_id === 'profile_default') {
+      console.log('Updating session with real profile:', activeProfile.user_profile_id);
+      sessionDataRef.current.user_profile_id = activeProfile.user_profile_id;
     }
+  }, [user?.role_entity_id, profiles, currentProfile, profilesLoading, isAuthenticated]);
+
+  // Dynamic Session configuration based on user data
+  const getSessionConfig = () => {
+    // Get the active profile or first available profile
+    const activeProfile = currentProfile || (profiles && profiles.length > 0 ? profiles[0] : null);
+    
+    // Log available profiles for debugging
+    console.log('Available profiles:', profiles);
+    console.log('Current profile:', currentProfile);
+    console.log('Selected active profile:', activeProfile);
+    
+    // More lenient check - if no profile is immediately available, use a fallback approach
+    let userProfileId = 'profile_default'; // Temporary fallback
+    let participantName = user?.name || 'User';
+    
+    if (activeProfile) {
+      userProfileId = activeProfile.user_profile_id;
+      participantName = activeProfile.name || user?.name || 'User';
+      console.log('Using valid profile:', userProfileId);
+    } else {
+      console.warn('No profile found, using fallback temporarily - session will auto-update when profile loads');
+    }
+    
+    const timestamp = Date.now();
+    const randomId = Math.random().toString(36).substr(2, 9);
+    const extraRandomId = Math.random().toString(36).substr(2, 5); // Extra randomness for uniqueness
+    
+    const sessionConfig = {
+      conversation_id: `livekit_fresh_${timestamp}_${randomId}_${extraRandomId}`,
+      individual_id: user?.role_entity_id || 'individual_default',
+      user_profile_id: userProfileId,
+      detected_agent: 'unknown', // Will be detected dynamically
+      agent_instance_id: `dynamic_fresh_${timestamp}_${randomId}`, // Will be created dynamically
+      call_log_id: `call_log_voice_fresh_${timestamp}_${randomId}`,
+      participant_name: participantName,
+      voice_settings: {
+        vad_enabled: true,
+        echo_cancellation: true,
+        noise_suppression: true,
+        auto_gain_control: true,
+        sample_rate: 16000,
+        interruption_enabled: true
+      },
+      // Add force_fresh flag to ensure backend treats this as completely new
+      force_fresh_start: true,
+      session_reset_timestamp: timestamp
+    };
+    
+    console.log('Generated COMPLETELY FRESH session config:', {
+      conversation_id: sessionConfig.conversation_id,
+      user_profile_id: sessionConfig.user_profile_id,
+      participant_name: sessionConfig.participant_name,
+      force_fresh_start: sessionConfig.force_fresh_start,
+      session_reset_timestamp: sessionConfig.session_reset_timestamp
+    });
+    
+    return sessionConfig;
   };
 
   // Synchronized typing effect functions
@@ -571,14 +632,23 @@ const ImprovedVoiceAssistant = () => {
         return;
       }
 
+      // Get user profile ID - session data should now contain the correct ID
+      const activeProfile = currentProfile || (profiles && profiles.length > 0 ? profiles[0] : null);
+      const userProfileId = currentSessionData.user_profile_id || activeProfile?.user_profile_id || 'profile_default';
+      
+      console.log('Using user_profile_id for API call:', userProfileId);
+      console.log('Session data user_profile_id:', currentSessionData.user_profile_id);
+      console.log('Active profile user_profile_id:', activeProfile?.user_profile_id);
+
       const payload = {
         session_id: currentSessionData.session_id,
         text: text,
         conversation_id: currentSessionData.conversation_id,
-        individual_id: currentSessionData.individual_id || 'individual_f068689a7d96',
-        user_profile_id: currentSessionData.user_profile_id || 'user_profile_610f7db5658e'
+        individual_id: currentSessionData.individual_id || user?.role_entity_id || 'individual_default',
+        user_profile_id: userProfileId
       };
 
+      console.log('🔍 DEBUG: Voice API payload being sent:', payload);
       console.log('Sending request to voice API');
       const response = await fetch('/api/v1/voice/voice-message', {
         method: 'POST',
@@ -594,12 +664,56 @@ const ImprovedVoiceAssistant = () => {
       if (result.status === 'success') {
         const responseText = result.assistant_response;
         
-        // Update current conversation
-        setCurrentConversation({ user: text, bot: responseText, timestamp: Date.now() });
-        
-        // Start bot typing and speaking
-        startBotTyping(responseText);
-        await speakText(responseText);
+        // Check if this is a connecting message
+        if (result.is_connecting) {
+          console.log('Received connecting message, playing and then calling orchestrator');
+          
+          // Update current conversation with connecting message
+          setCurrentConversation({ user: text, bot: responseText, timestamp: Date.now() });
+          
+          // Start bot typing and speaking the connecting message
+          startBotTyping(responseText);
+          await speakText(responseText);
+          
+          // After connecting message is done, make the follow-up call to orchestrator
+          setTimeout(async () => {
+            try {
+              const continueResponse = await fetch('/api/v1/voice/voice-message-continue', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+              });
+
+              const continueResult = await continueResponse.json();
+              console.log('Continue API response:', continueResult);
+
+              if (continueResult.status === 'success') {
+                const orchestratorResponse = continueResult.assistant_response;
+                
+                // Update conversation with actual orchestrator response
+                setCurrentConversation({ user: text, bot: orchestratorResponse, timestamp: Date.now() });
+                
+                // Start bot typing and speaking orchestrator response
+                startBotTyping(orchestratorResponse);
+                await speakText(orchestratorResponse);
+              } else {
+                console.error('Continue API error:', continueResult);
+              }
+            } catch (error) {
+              console.error('Error in continue call:', error);
+            }
+          }, 500); // Small delay to ensure connecting message finishes
+          
+        } else {
+          // Normal response handling
+          setCurrentConversation({ user: text, bot: responseText, timestamp: Date.now() });
+          
+          // Start bot typing and speaking
+          startBotTyping(responseText);
+          await speakText(responseText);
+        }
         
         console.log('Voice processing completed');
       } else {
@@ -687,19 +801,39 @@ const ImprovedVoiceAssistant = () => {
 
   const createSession = async () => {
     try {
+      const currentSessionConfig = getSessionConfig();
+      
+      // Check if we have a valid session config (should always have one now)
+      if (!currentSessionConfig) {
+        throw new Error('Failed to generate session configuration');
+      }
+      
+      console.log('Creating session with config:', currentSessionConfig);
+      
       const response = await fetch('/api/v1/voice/voice-sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(sessionConfig)
+        body: JSON.stringify(currentSessionConfig)
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to create session: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Session creation failed:', response.status, errorText);
+        throw new Error(`Failed to create session: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Session creation response:', data);
+      
+      // Ensure the session data has the user_profile_id from the original config
+      const sessionConfig = getSessionConfig();
+      if (sessionConfig && !data.user_profile_id && sessionConfig.user_profile_id) {
+        data.user_profile_id = sessionConfig.user_profile_id;
+        console.log('Added user_profile_id to session data:', data.user_profile_id);
+      }
+      
       setSessionData(data);
       sessionDataRef.current = data;
       return data;
@@ -709,27 +843,91 @@ const ImprovedVoiceAssistant = () => {
     }
   };
 
+  const deleteSession = async (sessionId) => {
+    try {
+      if (!sessionId) return;
+      
+      const response = await fetch(`/api/v1/voice/voice-sessions/${sessionId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        console.log('Session deleted successfully');
+      } else {
+        console.warn('Failed to delete session:', response.status);
+      }
+    } catch (error) {
+      console.error('Error deleting session:', error);
+    }
+  };
+
   const startVoiceAssistant = async () => {
     try {
-      console.log('Starting voice assistant');
+      console.log('=== Starting voice assistant - COMPLETE FRESH SESSION RESET ===');
       
-      // Reset all states and initialization flags
-      setDebugStatus('Initializing...');
+      // STEP 0: Log the session start attempt
+      console.log('=== Starting voice assistant - COMPLETE FRESH SESSION RESET ===');
+      console.log('User:', user?.role_entity_id);
+      console.log('Profiles available:', profiles?.length || 0);
+      console.log('Current profile:', currentProfile?.user_profile_id);
+      
+      // STEP 1: Immediately stop any existing session to prevent conflicts
+      if (sessionDataRef.current?.session_id) {
+        console.log('Found existing session, force deleting:', sessionDataRef.current.session_id);
+        await deleteSession(sessionDataRef.current.session_id);
+      }
+      
+      // STEP 2: Reset ALL states and initialization flags for completely fresh start
+      setDebugStatus('Initializing fresh session...');
       setTurnCount(0);
       setCurrentConversation(null);
+      setSessionData(null);  // Clear any existing session data
+      sessionDataRef.current = null;  // Clear session reference
       stopAllTyping();
       vadInitializedRef.current = false;
       voiceDetectionCountRef.current = 0;
       
-      // Clear any existing flags
+      // STEP 3: Clear any existing flags and timers completely
       speechRecognitionActiveRef.current = false;
       isProcessingRef.current = false;
       voiceActivityRef.current = false;
       
+      // Clear all timeouts to prevent interference
+      if (silenceTimerRef.current) {
+        clearTimeout(silenceTimerRef.current);
+        silenceTimerRef.current = null;
+      }
+      
+      // Stop all existing audio processes
+      stopVoiceActivityDetection();
+      stopSpeechRecognition();
+      
+      // Cancel any ongoing speech synthesis
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      setIsBotSpeaking(false);
+      
+      // Small delay to ensure cleanup is complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // STEP 4: Create completely new session with fresh configuration
+      console.log('Creating completely new session with fresh context...');
       const session = await createSession();
+      console.log('Fresh session created successfully:', session?.session_id);
+      
+      if (!session || !session.session_id) {
+        throw new Error('Failed to create fresh session');
+      }
+      
+      // STEP 5: Setup audio detection for new session
       setDebugStatus('Session created, setting up audio...');
       await startVoiceActivityDetection();
-      // Start 5-second countdown for first turn
+      
+      // STEP 6: Start countdown for first turn
       setIsWaiting(true);
       setSeconds(5);
       
@@ -738,9 +936,7 @@ const ImprovedVoiceAssistant = () => {
           if (prev <= 1) {
             clearInterval(countdownInterval);
             setIsWaiting(false);
-            // Start voice detection after countdown
-            // startVoiceActivityDetection();
-            setDebugStatus('Ready to listen');
+            setDebugStatus('Ready to listen - Fresh session active');
             return 0;
           }
           return prev - 1;
@@ -748,57 +944,120 @@ const ImprovedVoiceAssistant = () => {
       }, 1000);
       
       setIsRecording(true);
-      setDebugStatus('Preparing voice assistant...');
+      setDebugStatus('Fresh session initialized successfully');
       
-      console.log('Voice assistant started successfully');
+      console.log('=== Voice assistant started with FRESH SESSION successfully ===');
       
     } catch (error) {
-      console.error('Error starting voice assistant:', error);
+      console.error('Error starting voice assistant with fresh session:', error);
       setDebugStatus('Error: ' + error.message);
       setIsWaiting(false);
+      setIsRecording(false);
     }
   };
 
-  const stopVoiceAssistant = () => {
-    console.log('Stopping voice assistant');
+  const stopVoiceAssistant = async () => {
+    console.log('=== Stopping voice assistant and cleaning up session ===');
+    console.log('Current session to delete:', sessionDataRef.current?.session_id);
+    
+    // STEP 1: Immediately set recording to false
     setIsRecording(false);
     setIsWaiting(false);
     setSeconds(5);
     
-    // Clear all flags and timers
+    // STEP 2: Clear all flags and timers completely
     speechRecognitionActiveRef.current = false;
     isProcessingRef.current = false;
     voiceActivityRef.current = false;
     vadInitializedRef.current = false;
     voiceDetectionCountRef.current = 0;
     
-    // Clear all timeouts
+    // STEP 3: Clear all timeouts and intervals
     if (silenceTimerRef.current) {
       clearTimeout(silenceTimerRef.current);
       silenceTimerRef.current = null;
     }
     
-    // Stop all audio processes
+    // STEP 4: Stop all audio processes immediately
     stopVoiceActivityDetection();
     stopSpeechRecognition();
     stopAllTyping();
     
-    // Cancel speech synthesis
+    // STEP 5: Cancel speech synthesis immediately
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
     setIsBotSpeaking(false);
     
-    // Clear current conversation when stopping
-    setCurrentConversation(null);
-    setDebugStatus('Ready');
+    // STEP 6: Delete session from backend to ensure intent detection reset
+    if (sessionDataRef.current?.session_id) {
+      console.log('Deleting session from backend:', sessionDataRef.current.session_id);
+      try {
+        await deleteSession(sessionDataRef.current.session_id);
+        console.log('Session deletion completed successfully');
+      } catch (error) {
+        console.error('Error deleting session:', error);
+      }
+    } else {
+      console.log('No session to delete');
+    }
     
-    console.log('Voice assistant stopped');
+    // STEP 7: Clear ALL frontend session state completely
+    setCurrentConversation(null);
+    setSessionData(null);
+    sessionDataRef.current = null;
+    setDebugStatus('Ready - All session data cleared');
+    
+    console.log('=== Voice assistant stopped and session completely cleared ===');
   };
 
-  // Cleanup on unmount
+  // Wrapper function to handle async operations properly
+  const handleVoiceToggle = async () => {
+    if (isRecording) {
+      await stopVoiceAssistant();
+    } else {
+      // Just start the session - let the backend handle validation
+      await startVoiceAssistant();
+    }
+  };
+
+  // Cleanup on unmount and page refresh/close
   useEffect(() => {
+    const handleBeforeUnload = async () => {
+      // Use sendBeacon for reliable cleanup on page unload
+      if (sessionDataRef.current?.session_id) {
+        // Create a minimal request body for DELETE
+        const deleteData = new Blob(
+          [JSON.stringify({ session_id: sessionDataRef.current.session_id })], 
+          { type: 'application/json' }
+        );
+        
+        // Use fetch with keepalive flag as sendBeacon alternative
+        try {
+          fetch(`/api/v1/voice/voice-sessions/${sessionDataRef.current.session_id}`, {
+            method: 'DELETE',
+            keepalive: true,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).catch(() => {
+            // Ignore errors on page unload
+          });
+        } catch (error) {
+          // Fallback to sendBeacon if fetch fails
+          navigator.sendBeacon(
+            `/api/v1/voice/voice-sessions/${sessionDataRef.current.session_id}`,
+            deleteData
+          );
+        }
+      }
+    };
+
+    // Add beforeunload event listener
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       stopVoiceAssistant();
       if (roomRef.current) {
         roomRef.current.disconnect();
@@ -905,10 +1164,46 @@ const ImprovedVoiceAssistant = () => {
   );
 };
 
+  // Check if profiles are ready - more lenient check
+  const activeProfile = currentProfile || (profiles && profiles.length > 0 ? profiles[0] : null);
+  const isProfileReady = !profilesLoading; // Simplified check - just wait for loading to finish
+  const canStartSession = isAuthenticated && user && isProfileReady;
+
   return (
    <div className="min-h-screen bg-[#f8f7f1] flex flex-col items-center justify-center p-4 sm:p-6">
 
       <div className="w-full max-w-2xl mx-auto">
+        
+        {/* Profile Loading State */}
+        {profilesLoading && (
+          <div className="text-center mb-8">
+            <div className="inline-block bg-blue-50 px-6 py-4 rounded-2xl backdrop-blur-sm">
+              <div className="text-blue-800 text-lg font-medium">
+                Loading your profile...
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* No Profile Warning */}
+        {!profilesLoading && !activeProfile && (
+          <div className="text-center mb-8">
+            <div className="inline-block bg-yellow-50 px-6 py-4 rounded-2xl backdrop-blur-sm">
+              <div className="text-yellow-800 text-lg font-medium">
+                Profile not found
+              </div>
+              <div className="text-yellow-600 text-sm mt-1">
+                Please refresh the page or check your profile settings.
+              </div>
+              <button 
+                onClick={fetchProfiles}
+                className="mt-2 px-4 py-2 bg-yellow-600 text-white rounded-lg text-sm hover:bg-yellow-700 transition-colors"
+              >
+                Retry Loading Profile
+              </button>
+            </div>
+          </div>
+        )}
         
         {/* Main Control Button - Always Centered */}
         <div className="flex flex-col items-center mb-8">
@@ -935,14 +1230,25 @@ const ImprovedVoiceAssistant = () => {
             )}
           </button> */}
 
-          <AmebaButton 
-            isRecording={isRecording} 
-            startVoiceAssistant={startVoiceAssistant} 
-            stopVoiceAssistant={stopVoiceAssistant} 
-          />
+          {/* Always show the voice button when user is authenticated */}
+          {isAuthenticated && user ? (
+            <AmebaButton 
+              isRecording={isRecording} 
+              handleVoiceToggle={handleVoiceToggle}
+            />
+          ) : (
+            <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-gray-300 flex items-center justify-center opacity-50">
+              <div className="text-gray-500 text-sm text-center">
+                Not Authenticated
+              </div>
+            </div>
+          )}
 
 <div className="mt-4 text-[#15345fff] text-lg sm:text-xl font-medium text-center">
-  {isRecording ? 'Voice Assistant Active' : 'Start Conversation'}
+  {!isAuthenticated || !user
+    ? 'Please login to start' 
+    : (isRecording ? 'Voice Assistant Active' : 'Start Conversation')
+  }
 </div>
 
 

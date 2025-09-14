@@ -144,24 +144,37 @@ export default function ConversationList({ selectedAgentType, onConversationSele
       )}
 
       {/* Conversation Groups */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Conversations {selectedAgentType && `- ${selectedAgentType} Agent`}
-          </h3>
-          <p className="text-sm text-gray-600 mt-1">
-            {conversations.total_conversations} conversations grouped by goal/session
-          </p>
+      <div className="bg-white rounded-xl border border-gray-200 flex flex-col max-h-[70vh]">
+        <div className="p-6 border-b border-gray-200 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Conversations {selectedAgentType && `- ${selectedAgentType} Agent`}
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                {conversations.total_conversations} conversations grouped by goal/session
+                {conversations.conversation_groups.length > 5 && (
+                  <span className="text-xs text-blue-600 ml-2">• Scroll to view all</span>
+                )}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-100 overflow-y-auto flex-1 conversation-list-scroll">
           {console.log(conversations)}
           {conversations.conversation_groups.map((group) => (
             <div key={group.agent_instance_id} className="border-b border-gray-100 last:border-b-0">
               {/* Group Header */}
               <button
                 onClick={() => toggleGroup(group.agent_instance_id)}
-                className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleGroup(group.agent_instance_id);
+                  }
+                }}
+                className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
               >
                 <div className="flex items-center space-x-3">
                   {expandedGroups.has(group.agent_instance_id) ? (
@@ -197,11 +210,25 @@ export default function ConversationList({ selectedAgentType, onConversationSele
               {/* Expanded Conversations */}
               {expandedGroups.has(group.agent_instance_id) && (
                 <div className="bg-gray-50 border-t border-gray-100">
-                  {group.conversations.map((conversation) => (
+                  {group.conversations.length > 8 && (
+                    <div className="px-8 py-2 bg-gray-100 border-b border-gray-200">
+                      <p className="text-xs text-gray-600">
+                        {group.conversations.length} conversations in this group • Scroll to view all
+                      </p>
+                    </div>
+                  )}
+                  <div className="max-h-80 overflow-y-auto conversation-expanded-scroll">
+                    {group.conversations.map((conversation) => (
                     <button
                       key={conversation.conversation_id}
                       onClick={() => handleConversationSelect(conversation)}
-                      className={`w-full px-8 py-3 text-left hover:bg-white transition-colors border-l-4 ${
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleConversationSelect(conversation);
+                        }
+                      }}
+                      className={`w-full px-8 py-3 text-left hover:bg-white transition-colors border-l-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
                         selectedConversation === conversation.conversation_id
                           ? 'border-blue-500 bg-blue-50'
                           : 'border-transparent'
@@ -236,6 +263,7 @@ export default function ConversationList({ selectedAgentType, onConversationSele
                       </div>
                     </button>
                   ))}
+                  </div>
                 </div>
               )}
             </div>
