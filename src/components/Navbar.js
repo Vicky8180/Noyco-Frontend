@@ -62,6 +62,12 @@ export default function Navbar() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden sm:flex items-center space-x-3">
+            <Link
+              href="/docs"
+              className="px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-yellow-600 transition-colors"
+            >
+              Docs
+            </Link>
             {isAuthenticated && !loading && !pathname?.startsWith('/auth') ? (
               <>
                 <span className="text-sm text-gray-700">{user?.email}</span>
@@ -113,6 +119,12 @@ export default function Navbar() {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="sm:hidden px-4 pb-4 border-t border-gray-200">
+          <Link
+            href="/docs"
+            className="block mt-3 px-4 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+          >
+            Documentation
+          </Link>
           {isAuthenticated && !loading && !pathname?.startsWith('/auth') ? (
             <>
               <p className="text-sm text-gray-500 mt-3">Signed in as</p>

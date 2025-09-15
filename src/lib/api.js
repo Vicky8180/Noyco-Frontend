@@ -12,13 +12,14 @@ const MAX_REFRESH_RETRIES = 2; // Maximum number of refresh attempts
 // the same-origin proxy so that cookies are always sent.
 const BYPASS_PROXY_ENDPOINTS = [
   "/auth/login",
+  "/docs/",
 ];
 
 // Helper function to build API URLs
 export const getApiUrl = (path) => {
   if (typeof window !== 'undefined') {
-    // If this is an auth endpoint, build absolute URL to API gateway
-    if (BYPASS_PROXY_ENDPOINTS.includes(path)) {
+    // If this is an auth endpoint or docs endpoint, build absolute URL to API gateway
+    if (BYPASS_PROXY_ENDPOINTS.includes(path) || path.startsWith('/docs/')) {
       return `${API_BASE_URL}${path}`;
     }
     // Otherwise use relative path (Next.js rewrite)
