@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { XCircleIcon, UserIcon, BotIcon, CalendarIcon, MessageSquareIcon } from 'lucide-react';
+import { X, User, Monitor, Calendar, MessageCircle } from 'lucide-react';
 import { useMetrics } from '../../../../../store/hooks';
 
 export default function ConversationDetail({ conversation, onClose }) {
@@ -50,9 +50,9 @@ export default function ConversationDetail({ conversation, onClose }) {
 
   const getAgentColor = (agentType) => {
     const colors = {
-      'loneliness': 'bg-blue-100 text-blue-800',
-      'accountability': 'bg-green-100 text-green-800',
-      'mental_therapist': 'bg-purple-100 text-purple-800',
+      'loneliness': 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800',
+      'accountability': 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800',
+      'mental_therapist': ' text-purple-800',
       'nutrition': 'bg-orange-100 text-orange-800',
       'medication': 'bg-red-100 text-red-800'
     };
@@ -63,7 +63,7 @@ export default function ConversationDetail({ conversation, onClose }) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2  mx-auto mb-4"></div>
           <p className="text-gray-600">Loading conversation...</p>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function ConversationDetail({ conversation, onClose }) {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-center p-6 text-gray-500">
-          <MessageSquareIcon className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+          <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
           <p>Select a conversation to view details</p>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default function ConversationDetail({ conversation, onClose }) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-beige">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center space-x-3">
@@ -124,7 +124,7 @@ export default function ConversationDetail({ conversation, onClose }) {
           onClick={onClose}
           className="text-gray-400 hover:text-gray-600 transition-colors"
         >
-          <XCircleIcon className="w-6 h-6" />
+          <X className="w-6 h-6" />
         </button>
       </div>
 
@@ -165,7 +165,7 @@ export default function ConversationDetail({ conversation, onClose }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {detail.context.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
-            <MessageSquareIcon className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+            <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-300" />
             <p>No messages in this conversation</p>
           </div>
         ) : (
@@ -180,12 +180,12 @@ export default function ConversationDetail({ conversation, onClose }) {
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
                 message.role === 'user' 
                   ? 'bg-blue-100 text-blue-600' 
-                  : 'bg-green-100 text-green-600'
+                  : 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800'
               }`}>
                 {message.role === 'user' ? (
-                  <UserIcon className="w-4 h-4" />
+                  <User className="w-4 h-4" />
                 ) : (
-                  <BotIcon className="w-4 h-4" />
+                  <Monitor className="w-4 h-4" />
                 )}
               </div>
 
@@ -195,7 +195,7 @@ export default function ConversationDetail({ conversation, onClose }) {
               }`}>
                 <div className={`inline-block px-4 py-2 rounded-lg ${
                   message.role === 'user'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800'
                     : 'bg-gray-100 text-gray-900'
                 }`}>
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -219,7 +219,7 @@ export default function ConversationDetail({ conversation, onClose }) {
         <div className="flex items-center justify-between text-sm text-gray-600">
           <span>End of conversation</span>
           <div className="flex items-center space-x-2">
-            <CalendarIcon className="w-4 h-4" />
+            <Calendar className="w-4 h-4" />
             <span>Last activity: {formatTimestamp(detail.updated_at)}</span>
           </div>
         </div>

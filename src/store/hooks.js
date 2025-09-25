@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../lib/constant';
 import { apiRequest } from '../lib/api';
 import {
   login as loginAction,
+  loginWithGoogle as loginWithGoogleAction,
   logout as logoutAction,
   registerUser as registerUserAction,
   checkAuthStatus as checkAuthStatusAction,
@@ -62,6 +63,16 @@ export const useAuth = () => {
         success: true,
         user: result.user
       };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
+  // Google Login function
+  const loginWithGoogle = async (idToken) => {
+    try {
+      const result = await dispatch(loginWithGoogleAction({ id_token: idToken })).unwrap();
+      return { success: true, user: result.user };
     } catch (error) {
       return { success: false, error };
     }
@@ -157,6 +168,7 @@ export const useAuth = () => {
     loading,
     error,
     login,
+    loginWithGoogle,
     logout,
     registerUser,
     sendOTP,

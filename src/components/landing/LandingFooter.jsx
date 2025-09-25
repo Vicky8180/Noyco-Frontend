@@ -13,11 +13,11 @@ export default function LandingFooter() {
       { name: 'Masterclasses', href: '#' }
     ],
     Company: [
-      { name: 'About Us', href: '#' },
+      { name: 'About Us', href: '/legal/about' },
       { name: 'Careers', href: '#' },
       { name: 'Press', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Contact', href: '#' }
+      { name: 'Blog', href: '/blog' },
+      { name: 'Contact', href: '/contact-us' }
     ],
     Resources: [
       { name: 'Help Center', href: '#' },
@@ -138,10 +138,10 @@ export default function LandingFooter() {
                 © 2024 Noyco.com, Inc. All rights reserved.
               </p>
               <div className="flex space-x-6 text-sm">
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/legal/privacy" className="text-gray-400 hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/legal/terms" className="text-gray-400 hover:text-white transition-colors">
                   Terms of Service
                 </Link>
                 <Link href="#" className="text-gray-400 hover:text-white transition-colors">

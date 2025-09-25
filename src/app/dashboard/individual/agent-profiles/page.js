@@ -6,6 +6,8 @@ import ProfileGrid from "./components/ProfileGrid";
 import ProfileCreator from "./components/ProfileCreator";
 import ProfileViewer from "./components/ProfileViewer";
 import EmptyState from "./components/EmptyState";
+import { Bot } from "lucide-react";
+import { Mars, Venus, NonBinary, UserCircle } from "lucide-react";
 
 export default function AgentProfilesPage() {
   const { user } = useAuth();
@@ -150,13 +152,27 @@ export default function AgentProfilesPage() {
     }
   }).filter(Boolean); // Remove any falsy values
 
-  function getAvatarFromGender(gender) {
-    switch (gender?.toLowerCase()) {
-      case 'male': return '👨';
-      case 'female': return '👩';
-      default: return '👤';
-    }
+  // function getAvatarFromGender(gender) {
+  //   switch (gender?.toLowerCase()) {
+  //     case 'male': return '👨';
+  //     case 'female': return '👩';
+  //     default: return '👤';
+  //   }
+  // }
+
+
+ function getAvatarFromGender(gender) {
+  switch ((gender || "").toLowerCase()) {
+    case "male":
+      return <Mars className="w-6 h-6 text-blue-600" />;
+    case "female":
+      return <Venus className="w-6 h-6 text-pink-600" />;
+    case "non-binary":
+      return <NonBinary className="w-6 h-6 text-purple-600" />;
+    default:
+      return <UserCircle className="w-6 h-6 text-gray-600" />;
   }
+}
 
   function generateProfileDescription(profile) {
     const parts = [];
@@ -180,6 +196,16 @@ export default function AgentProfilesPage() {
     return new Date(b.last_used || 0) - new Date(a.last_used || 0);
   });
 
+  // Default to viewing the most recent profile when profiles are available
+  useEffect(() => {
+    if (!isLoading && profiles.length > 0 && currentView === "grid" && !selectedProfile) {
+      const defaultProfile = sortedProfiles[0];
+      setSelectedProfile(defaultProfile);
+      setActiveProfile(defaultProfile);
+      setCurrentView("view");
+    }
+  }, [isLoading, profiles, currentView, selectedProfile, setActiveProfile, sortedProfiles]);
+
   // Show error if exists
   useEffect(() => {
     if (error) {
@@ -195,8 +221,8 @@ export default function AgentProfilesPage() {
             <div className="mb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] flex items-center justify-center">
-                    <span className="text-white text-xl">🤖</span>
+                  <div className="w-12 h-12 flex items-center justify-center text-gray-800">
+                  <Bot className="w-7 h-7 text-gray-700" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900">Agent Profiles</h2>

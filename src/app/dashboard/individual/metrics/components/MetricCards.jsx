@@ -1,31 +1,31 @@
 'use client';
-import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 
 export function MetricCard({ title, value, subtitle, trend, icon, color = 'blue' }) {
   const colorClasses = {
     blue: 'bg-blue-50 text-blue-600 border-blue-100',
-    green: 'bg-green-50 text-green-600 border-green-100',
+    green: 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 border-accent',
     orange: 'bg-orange-50 text-orange-600 border-orange-100',
     red: 'bg-red-50 text-red-600 border-red-100',
     purple: 'bg-purple-50 text-purple-600 border-purple-100'
   };
 
   return (
-    <div className="bg-beige  p-6 border-accent-right border-accent-left border-accent-top border-accent">
+    <div className="bg-beige p-6 border-accent border-accent-top border-accent-left border-accent-right">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mb-2">{value}</p>
+          <p className="text-3xl  text-gray-900 mb-2">{value}</p>
           {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
           
           {trend && (
             <div className="flex items-center mt-3">
               <div className={`flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                trend.direction === 'up' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                trend.direction === 'up' ? 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800' : 'bg-red-100 text-red-700'
               }`}>
                 {trend.direction === 'up' ? 
-                  <ArrowUpIcon className="w-3 h-3 mr-1" /> : 
-                  <ArrowDownIcon className="w-3 h-3 mr-1" />
+                  <ArrowUp className="w-3 h-3 mr-1" /> : 
+                  <ArrowDown className="w-3 h-3 mr-1" />
                 }
                 {trend.value}
               </div>
@@ -35,7 +35,7 @@ export function MetricCard({ title, value, subtitle, trend, icon, color = 'blue'
         </div>
         
         {icon && (
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${colorClasses[color]}`}>
+          <div className="flex items-center justify-center text-current">
             {icon}
           </div>
         )}
@@ -46,13 +46,13 @@ export function MetricCard({ title, value, subtitle, trend, icon, color = 'blue'
 
 export function SystemHealthCard({ health }) {
   const statusColors = {
-    healthy: 'text-green-600 bg-green-100',
+    healthy: 'text-gray-800 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]',
     warning: 'text-orange-600 bg-orange-100',
     critical: 'text-red-600 bg-red-100'
   };
 
   return (
-    <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
+    <div className="bg-beige p-6 border-accent border-accent-top border-accent-left border-accent-right">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">System Health</h3>
         <div className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[health?.status] || statusColors.healthy}`}>
@@ -80,7 +80,7 @@ export function SystemHealthCard({ health }) {
 
 export function PatientEngagementCard({ engagement }) {
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100">
+    <div className="bg-beige p-6 border-accent border-accent-top border-accent-left border-accent-right">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Patient Engagement</h3>
       
       <div className="space-y-4">

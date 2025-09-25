@@ -1,7 +1,6 @@
 import HeroSection from '@/components/landing/HeroSection';
 import FeaturesSection from '@/components/landing/FeaturesSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
-import LandingFooter from '@/components/landing/LandingFooter';
 
 const HomePage = () => {
   return (
@@ -21,8 +20,6 @@ const HomePage = () => {
       <section id="testimonials">
         <TestimonialsSection />
       </section>
-
-      
     </div>
   );
 }

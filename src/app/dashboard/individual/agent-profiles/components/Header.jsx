@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MagnifyingGlassIcon, PlusIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import { User } from "lucide-react";
 
 const Header = ({
   onCreateProfile,
@@ -23,8 +24,8 @@ const Header = ({
     <div className="space-y-4">
 
      <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-            <span className="text-white text-xl">📅</span>
+          <div className="w-12 h-12 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] rounded-xl flex items-center justify-center">
+            <User className="w-7 h-7 text-gray-800" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-900">User Profiles</h2>
@@ -86,7 +87,7 @@ const Header = ({
             {/* Create Button */}
             <button
               onClick={onCreateProfile}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg shadow hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 font-medium shadow hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200"
             >
               <PlusIcon className="w-4 h-4" />
               <span>Create</span>

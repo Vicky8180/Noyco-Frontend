@@ -82,9 +82,9 @@ export default function SettingsPage() {
         if (!res.success) throw res.error;
       }
 
-      // Handle password change
+      // Handle password change (only for non-OAuth users)
       const { current, new: newPwd, confirm } = settings.password;
-      if (current || newPwd || confirm) {
+      if ((current || newPwd || confirm) && user?.hasPassword) {
         if (!current || !newPwd || !confirm) {
           alert('Please fill all password fields.');
           return;
@@ -109,8 +109,8 @@ export default function SettingsPage() {
   const tabs = [
     { id: 'profile', name: 'Profile', icon: User },
     { id: 'notifications', name: 'Notifications', icon: Bell },
-    { id: 'privacy', name: 'Privacy', icon: Shield },
-    { id: 'preferences', name: 'Preferences', icon: Settings }
+    // { id: 'privacy', name: 'Privacy', icon: Shield },
+    // { id: 'preferences', name: 'Preferences', icon: Settings }
   ];
 
   const renderProfileTab = () => (
@@ -149,35 +149,37 @@ export default function SettingsPage() {
               title="10-15 digits, optional leading +"
             />
           </div>
-          {/* Password section*/}
-          <div className="lg:col-span-2">
-            <h4 className="text-md font-medium text-gray-900 mb-2">Change Password</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <input 
-                type="password" 
-                value={settings.password.current} 
-                onChange={(e)=>handleSettingChange('password','current',e.target.value)} 
-                placeholder="Current Password" 
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-accent-right border-accent-left border-accent-top border-accent rounded-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 transition-colors border-accent text-sm sm:text-base" 
-              />
-              <input 
-                type="password" 
-                value={settings.password.new} 
-                onChange={(e)=>handleSettingChange('password','new',e.target.value)} 
-                placeholder="New Password" 
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-accent-right border-accent-left border-accent-top border-accent rounded-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 transition-colors border-accent text-sm sm:text-base" 
-              />
-              <input 
-                type="password" 
-                value={settings.password.confirm} 
-                onChange={(e)=>handleSettingChange('password','confirm',e.target.value)} 
-                placeholder="Confirm New Password" 
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-accent-right border-accent-left border-accent-top border-accent rounded-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 transition-colors border-accent text-sm sm:text-base" 
-              />
+          {/* Password section - only show for email/password users */}
+          {user?.hasPassword && (
+            <div className="lg:col-span-2">
+              <h4 className="text-md font-medium text-gray-900 mb-2">Change Password</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                <input 
+                  type="password" 
+                  value={settings.password.current} 
+                  onChange={(e)=>handleSettingChange('password','current',e.target.value)} 
+                  placeholder="Current Password" 
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border-accent-right border-accent-left border-accent-top border-accent rounded-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 transition-colors border-accent text-sm sm:text-base" 
+                />
+                <input 
+                  type="password" 
+                  value={settings.password.new} 
+                  onChange={(e)=>handleSettingChange('password','new',e.target.value)} 
+                  placeholder="New Password" 
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border-accent-right border-accent-left border-accent-top border-accent rounded-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 transition-colors border-accent text-sm sm:text-base" 
+                />
+                <input 
+                  type="password" 
+                  value={settings.password.confirm} 
+                  onChange={(e)=>handleSettingChange('password','confirm',e.target.value)} 
+                  placeholder="Confirm New Password" 
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border-accent-right border-accent-left border-accent-top border-accent rounded-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400 transition-colors border-accent text-sm sm:text-base" 
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
+            {/* <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
             <select
               value={settings.profile.language}
               onChange={(e) => handleSettingChange('profile', 'language', e.target.value)}
@@ -187,7 +189,7 @@ export default function SettingsPage() {
               <option value="es">Spanish</option>
               <option value="fr">French</option>
               <option value="de">German</option>
-            </select>
+            </select> */}
           </div>
         </div>
       </div>
@@ -299,10 +301,10 @@ export default function SettingsPage() {
         return renderProfileTab();
       case 'notifications':
         return renderNotificationsTab();
-      case 'privacy':
-        return renderPrivacyTab();
-      case 'preferences':
-        return renderPreferencesTab();
+      // case 'privacy':
+      //   return renderPrivacyTab();
+      // case 'preferences':
+      //   return renderPreferencesTab();
       default:
         return renderProfileTab();
     }

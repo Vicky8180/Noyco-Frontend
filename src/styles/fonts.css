@@ -1,0 +1,202 @@
+/* Mier A Font Configuration */
+
+/* 
+  ⚠️ FONT FILES MISSING: The Mier A font files are not present in public/fonts/ directory.
+  This causes 404 errors. The @font-face declarations are commented out until the font files are added.
+  
+  To fix this:
+  1. Add the font files to public/fonts/ directory, OR
+  2. Replace 'Mier A' with a web-safe font like 'Inter' from Google Fonts
+  
+  Current fallback: Using system fonts (Inter, SF Pro, Segoe UI, etc.)
+*/
+
+/* Commented out until font files are available
+@font-face {
+  font-family: 'Mier A';
+  src: url('/fonts/MierA-Regular.woff2') format('woff2'),
+       url('/fonts/MierA-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mier A';
+  src: url('/fonts/MierA-Medium.woff2') format('woff2'),
+       url('/fonts/MierA-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mier A';
+  src: url('/fonts/MierA-SemiBold.woff2') format('woff2'),
+       url('/fonts/MierA-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mier A';
+  src: url('/fonts/MierA-Bold.woff2') format('woff2'),
+       url('/fonts/MierA-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+/* Font utility classes for consistent usage */
+.font-mier {
+  font-family: 'Mier A', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Typography scale following Apple's design principles */
+.text-display-large {
+  font-family: 'Mier A', sans-serif;
+  font-size: 3.5rem; /* 56px */
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-display {
+  font-family: 'Mier A', sans-serif;
+  font-size: 2.5rem; /* 40px */
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-headline-large {
+  font-family: 'Mier A', sans-serif;
+  font-size: 2rem; /* 32px */
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.text-headline {
+  font-family: 'Mier A', sans-serif;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: 0;
+}
+
+.text-title-large {
+  font-family: 'Mier A', sans-serif;
+  font-size: 1.375rem; /* 22px */
+  font-weight: 500;
+  line-height: 1.36;
+  letter-spacing: 0;
+}
+
+.text-title {
+  font-family: 'Mier A', sans-serif;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+  line-height: 1.44;
+  letter-spacing: 0;
+}
+
+.text-body-large {
+  font-family: 'Mier A', sans-serif;
+  font-size: 1rem; /* 16px */
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.text-body {
+  font-family: 'Mier A', sans-serif;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: 0;
+}
+
+.text-caption-large {
+  font-family: 'Mier A', sans-serif;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: 0.01em;
+}
+
+.text-caption {
+  font-family: 'Mier A', sans-serif;
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
+/* Button text styles */
+.text-button-large {
+  font-family: 'Mier A', sans-serif;
+  font-size: 1rem; /* 16px */
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.text-button {
+  font-family: 'Mier A', sans-serif;
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  line-height: 1.29;
+  letter-spacing: 0.01em;
+}
+
+.text-button-small {
+  font-family: 'Mier A', sans-serif;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: 0.02em;
+}
+
+/* Special emphasis styles */
+.text-emphasis {
+  font-family: 'Mier A', sans-serif;
+  font-weight: 600;
+}
+
+.text-subtle {
+  font-family: 'Mier A', sans-serif;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Responsive typography adjustments */
+@media (max-width: 768px) {
+  .text-display-large {
+    font-size: 2.5rem; /* 40px */
+  }
+  
+  .text-display {
+    font-size: 2rem; /* 32px */
+  }
+  
+  .text-headline-large {
+    font-size: 1.75rem; /* 28px */
+  }
+}
+
+@media (max-width: 480px) {
+  .text-display-large {
+    font-size: 2rem; /* 32px */
+  }
+  
+  .text-display {
+    font-size: 1.75rem; /* 28px */
+  }
+  
+  .text-headline-large {
+    font-size: 1.5rem; /* 24px */
+  }
+}

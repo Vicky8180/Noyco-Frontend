@@ -62,14 +62,15 @@ const PersonalityForm = ({ data = {}, updateData }) => {
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          onKeyPress={(e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
               addItem(field, value, setValue);
             }
           }}
           placeholder={placeholder}
-          className="flex-1 px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm"
+          autoComplete="off"
+          className="flex-1 px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm"
         />
         <button
           type="button"
@@ -88,7 +89,7 @@ const PersonalityForm = ({ data = {}, updateData }) => {
               key={index}
               className="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 text-xs"
             >
-              {item}
+              {item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
               <button
                 type="button"
                 onClick={() => removeItem(field, index)}
@@ -177,7 +178,7 @@ const PersonalityForm = ({ data = {}, updateData }) => {
 
       {/* Preview Section */}
       {(safeData.personality_traits.length > 0 || safeData.hobbies.length > 0 || safeData.interests.length > 0) && (
-        <div className="bg-beige border border-accent p-4">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-4">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-4 h-4 bg-gray-500 rounded-full flex items-center justify-center">
               <span className="text-white text-xs">👁</span>

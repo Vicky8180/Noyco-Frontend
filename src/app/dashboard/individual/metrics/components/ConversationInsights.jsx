@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { MessageCircleIcon, ClockIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+import { MessageCircle, Clock, TrendingUp, Users } from 'lucide-react';
 import { useMetrics } from '../../../../../store/hooks';
 import ConversationList from './ConversationList';
 import ConversationDetail from './ConversationDetail';
@@ -59,7 +59,7 @@ export default function ConversationInsights({ onConversationSelect }) {
         {/* Right side wrapper */}
         <div className="flex items-center gap-3">
           <select 
-            className="px-3 py-1 text-sm bg-gray-100 font-medium rounded-md transition-colors text-gray-600 hover:text-gray-900"
+            className="px-3 py-1 text-sm bg-beige font-medium  transition-colors text-gray-600 hover:text-gray-900 border-accent border-accent-top border-accent-left border-accent-right focus:bg-gradient-to-r focus:from-[#E6D3E7] focus:via-[#F6D9D5] focus:to-[#D6E3EC] focus:text-gray-800"
             value={selectedAgentType}
             onChange={handleAgentTypeChange}
           >
@@ -71,14 +71,14 @@ export default function ConversationInsights({ onConversationSelect }) {
             ))}
           </select>
 
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex bg-beige border-accent border-accent-top border-accent-left border-accent-right p-1">
             {timeframes.map((timeframe) => (
               <button
                 key={timeframe.value}
                 onClick={() => setSelectedTimeframe(timeframe.value)}
-                className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
+                className={`px-3 py-1 text-sm font-medium transition-colors ${
                   selectedTimeframe === timeframe.value
-                    ? 'bg-white text-gray-900 shadow-sm'
+                    ? 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-900 shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -100,7 +100,7 @@ export default function ConversationInsights({ onConversationSelect }) {
         </div>
 
         {/* Right: Conversation Detail */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right overflow-hidden">
           {selectedConversation ? (
             <ConversationDetail 
               conversation={selectedConversation}
@@ -109,7 +109,7 @@ export default function ConversationInsights({ onConversationSelect }) {
           ) : (
             <div className="h-full flex items-center justify-center text-gray-500">
               <div className="text-center">
-                <MessageCircleIcon className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <MessageCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                 <h3 className="text-lg font-medium mb-2">No conversation selected</h3>
                 <p>Select a conversation from the left panel to view details</p>
               </div>

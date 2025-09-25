@@ -84,6 +84,23 @@ const ProfileCreator = ({ profile, isEdit, onBack, onSave }) => {
       }
     }
     
+    // Auto-add relationship if on Relationships step and form has data but not saved
+    if (currentStep === 3) {
+      const hasUnsavedLovedOne = Array.isArray(profileData.loved_ones) && profileData.loved_ones.some(lo => lo && lo.__unsaved);
+      // No-op: relationships form manages its own state; ensure at least placeholder save when moving next if user entered data
+    }
+
+    // Auto-add story if on Stories step and fields are filled but not added yet
+    if (currentStep === 4) {
+      // StoriesForm handles add when clicking its button; here we do nothing because we don't have the local newStory
+      // The actual auto-add is handled inside StoriesForm when Next is pressed via window event
+    }
+
+    // Broadcast an event so child forms (e.g., StoriesForm) can persist unsaved entries
+    if (typeof window !== 'undefined') {
+      const evt = new Event('profileCreator:next');
+      window.dispatchEvent(evt);
+    }
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     }
@@ -118,6 +135,15 @@ const ProfileCreator = ({ profile, isEdit, onBack, onSave }) => {
       }
 
       // Transform frontend data to backend format
+      // Sanitize stories: drop empty optional fields like empty date
+      const sanitizedStories = (Array.isArray(profileData.past_stories) ? profileData.past_stories : []).map(s => {
+        const cleaned = { ...s };
+        if (!cleaned.date || String(cleaned.date).trim() === "") {
+          delete cleaned.date;
+        }
+        return cleaned;
+      });
+
       const apiData = {
         profile_name: finalProfileName,
         name: cleanedAgentName,
@@ -130,7 +156,7 @@ const ProfileCreator = ({ profile, isEdit, onBack, onSave }) => {
         hates: Array.isArray(profileData.hates) ? profileData.hates : [],
         interests: Array.isArray(profileData.interests) ? profileData.interests : [],
         loved_ones: Array.isArray(profileData.loved_ones) ? profileData.loved_ones : [],
-        past_stories: Array.isArray(profileData.past_stories) ? profileData.past_stories : [],
+        past_stories: sanitizedStories,
         preferences: typeof profileData.preferences === 'object' ? profileData.preferences : {},
         personality_traits: Array.isArray(profileData.personality_traits) ? profileData.personality_traits : [],
         health_info: typeof profileData.health_info === 'object' ? profileData.health_info : {},
@@ -231,7 +257,7 @@ const ProfileCreator = ({ profile, isEdit, onBack, onSave }) => {
       </div> */}
 
       {/* Form Content */}
-      <div className="bg-beige shadow-sm border border-accent p-8 mb-8">
+      <div className="bg-beige shadow-sm border-accent border-accent-top border-accent-left border-accent-right p-8 mb-8">
         {CurrentStepComponent && (
           <CurrentStepComponent
             data={profileData}

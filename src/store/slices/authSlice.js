@@ -45,7 +45,8 @@ export const checkAuthStatus = createAsyncThunk(
           role: data.role,
           role_entity_id: data.role_entity_id,
           name: data.name || null,
-          phone: data.phone || null
+          phone: data.phone || null,
+          hasPassword: data.has_password || false
           // hospital_unique_identity: data.hospital_unique_identity
         },
         csrf_token: csrfToken
@@ -71,6 +72,30 @@ export const login = createAsyncThunk(
       return {
         user: {
           ...data.user,
+          hasPassword: true  // Regular login users have password
+        },
+        csrf_token: csrfToken
+      };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const loginWithGoogle = createAsyncThunk(
+  'auth/loginWithGoogle',
+  async ({ id_token }, { rejectWithValue }) => {
+    try {
+      const data = await apiRequest('/auth/google/login', {
+        method: 'POST',
+        body: JSON.stringify({ id_token })
+      });
+
+      const csrfToken = data.csrf_token || getCookie('csrf_token');
+      return {
+        user: { 
+          ...data.user,
+          hasPassword: false  // OAuth users don't have password
         },
         csrf_token: csrfToken
       };
@@ -102,7 +127,10 @@ export const registerUser = createAsyncThunk(
       const csrfToken = data.csrf_token || getCookie('csrf_token');
 
       return {
-        user: data.user,
+        user: {
+          ...data.user,
+          hasPassword: true  // Registered users have password
+        },
         csrf_token: csrfToken
       };
     } catch (error) {
@@ -334,6 +362,26 @@ const authSlice = createSlice({
         localStorage.removeItem('loggedOut');
       })
       .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Google Login
+      .addCase(loginWithGoogle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+        state.csrfToken = action.payload.csrf_token;
+        state.loading = false;
+        state.error = null;
+        localStorage.removeItem('lastRefreshAttempt');
+        localStorage.removeItem('refreshCount');
+        localStorage.removeItem('loggedOut');
+      })
+      .addCase(loginWithGoogle.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

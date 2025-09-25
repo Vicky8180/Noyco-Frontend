@@ -2,7 +2,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Smile, Trophy, History, Sparkles, Dumbbell, Frown, HandHeart, Laugh } from "lucide-react";
 import { PlusIcon, XMarkIcon, BookOpenIcon } from "@heroicons/react/24/outline";
 
 const StoriesForm = ({ data = {}, updateData }) => {
@@ -21,20 +22,28 @@ const StoriesForm = ({ data = {}, updateData }) => {
   };
 
   const emotionalSignificance = [
-    { value: "happy", label: "Happy", emoji: "😊" },
-    { value: "proud", label: "Proud", emoji: "🏆" },
-    { value: "nostalgic", label: "Nostalgic", emoji: "💭" },
-    { value: "inspiring", label: "Inspiring", emoji: "✨" },
-    { value: "challenging", label: "Challenging", emoji: "💪" },
-    { value: "sad", label: "Sad", emoji: "😢" },
-    { value: "grateful", label: "Grateful", emoji: "🙏" },
-    { value: "funny", label: "Funny", emoji: "😄" }
+    { value: "happy", label: "Happy", icon: <Smile className="w-3 h-3" /> },
+    { value: "proud", label: "Proud", icon: <Trophy className="w-3 h-3" /> },
+    { value: "nostalgic", label: "Nostalgic", icon: <History className="w-3 h-3" /> },
+    { value: "inspiring", label: "Inspiring", icon: <Sparkles className="w-3 h-3" /> },
+    { value: "challenging", label: "Challenging", icon: <Dumbbell className="w-3 h-3" /> },
+    { value: "sad", label: "Sad", icon: <Frown className="w-3 h-3" /> },
+    { value: "grateful", label: "Grateful", icon: <HandHeart className="w-3 h-3" /> },
+    { value: "funny", label: "Funny", icon: <Laugh className="w-3 h-3" /> }
   ];
 
   const addStory = () => {
     if (newStory.title.trim() && newStory.description.trim()) {
+      const story = { 
+        title: newStory.title.trim(), 
+        description: newStory.description.trim(),
+        emotional_significance: newStory.emotional_significance
+      };
+      if (newStory.date && String(newStory.date).trim() !== "") {
+        story.date = newStory.date;
+      }
       updateData({ 
-        past_stories: [...safeData.past_stories, { ...newStory, title: newStory.title.trim(), description: newStory.description.trim() }] 
+        past_stories: [...safeData.past_stories, story] 
       });
       setNewStory({ title: "", description: "", date: "", emotional_significance: "" });
       setShowAddForm(false);
@@ -59,6 +68,17 @@ const StoriesForm = ({ data = {}, updateData }) => {
       day: 'numeric' 
     });
   };
+
+  // Auto-add story on form progression (listen for a custom next event)
+  useEffect(() => {
+    const handler = (e) => {
+      if (newStory.title.trim() && newStory.description.trim()) {
+        addStory();
+      }
+    };
+    window.addEventListener('profileCreator:next', handler);
+    return () => window.removeEventListener('profileCreator:next', handler);
+  }, [newStory]);
 
   return (
     <div className="space-y-6">
@@ -93,7 +113,7 @@ const StoriesForm = ({ data = {}, updateData }) => {
                     <div className="flex items-center gap-2">
                       {story.emotional_significance && (
                         <span className="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 text-xs">
-                          <span>{emotionConfig.emoji}</span>
+                          {emotionConfig.icon}
                           <span>{emotionConfig.label}</span>
                         </span>
                       )}
@@ -124,7 +144,7 @@ const StoriesForm = ({ data = {}, updateData }) => {
           <span className="font-medium text-sm">Add Personal Story</span>
         </button>
       ) : (
-        <div className="bg-beige border border-accent p-4">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-gray-900">Add Personal Story</h3>
             <button
@@ -149,7 +169,7 @@ const StoriesForm = ({ data = {}, updateData }) => {
                 value={newStory.title}
                 onChange={(e) => setNewStory(prev => ({ ...prev, title: e.target.value }))}
                 placeholder="Give your story a meaningful title..."
-                className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm"
               />
             </div>
 
@@ -163,7 +183,7 @@ const StoriesForm = ({ data = {}, updateData }) => {
                   type="date"
                   value={newStory.date}
                   onChange={(e) => setNewStory(prev => ({ ...prev, date: e.target.value }))}
-                  className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm"
                 />
               </div>
               
@@ -174,12 +194,12 @@ const StoriesForm = ({ data = {}, updateData }) => {
                 <select
                   value={newStory.emotional_significance}
                   onChange={(e) => setNewStory(prev => ({ ...prev, emotional_significance: e.target.value }))}
-                  className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm bg-beige"
+                  className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm bg-beige hover:bg-gradient-to-r hover:from-[#E6D3E7] hover:via-[#F6D9D5] hover:to-[#D6E3EC]"
                 >
                   <option value="">Select feeling</option>
                   {emotionalSignificance.map((emotion) => (
                     <option key={emotion.value} value={emotion.value}>
-                      {emotion.emoji} {emotion.label}
+                      {emotion.label}
                     </option>
                   ))}
                 </select>
@@ -196,7 +216,7 @@ const StoriesForm = ({ data = {}, updateData }) => {
                 onChange={(e) => setNewStory(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Tell your story... What happened? How did it make you feel? Why is it important to you?"
                 rows={4}
-                className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 resize-none text-sm"
+                className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 resize-none text-sm"
               />
             </div>
 

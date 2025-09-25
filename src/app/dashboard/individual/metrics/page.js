@@ -3,19 +3,19 @@
 import { useState } from 'react';
 import { useMetrics } from '../../../../store/hooks';
 import { 
-  PhoneIcon, 
-  CalendarIcon, 
-  MessageCircleIcon, 
-  TrendingUpIcon,
-  TargetIcon,
-  UsersIcon,
-  ClockIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  AlertCircleIcon
+  Phone, 
+  Calendar, 
+  MessageCircle, 
+  TrendingUp,
+  Target,
+  Users,
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertTriangle
 } from 'lucide-react';
 
-import { MetricCard, SystemHealthCard, PatientEngagementCard } from './components/MetricCards';
+import { MetricCard, PatientEngagementCard } from './components/MetricCards';
 import { CallVolumeChart, SuccessRateChart, CallsByHourChart, CallStatusDistribution } from './components/AppleStyleCharts';
 import ConversationInsights from './components/ConversationInsights';
 import AgentMetrics from './components/AgentMetrics';
@@ -26,6 +26,11 @@ export default function MetricsDashboardPage() {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Expose a setter so other components/buttons can switch tabs
+  if (typeof window !== 'undefined') {
+    window.__setMetricsActiveTab = setActiveTab;
+  }
 
   if (loading) {
     return (
@@ -42,7 +47,7 @@ export default function MetricsDashboardPage() {
     return (
       <div className="min-h-screen bg-beige flex items-center justify-center">
         <div className="text-center">
-          <XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Unable to Load Metrics</h2>
           <p className="text-gray-600">Please try refreshing the page</p>
         </div>
@@ -53,9 +58,9 @@ export default function MetricsDashboardPage() {
   if (!dashboard) return null;
 
   const tabs = [
-    { id: 'overview', name: 'Overview', icon: TrendingUpIcon },
-    { id: 'agents', name: 'Agents', icon: TargetIcon },
-    { id: 'conversations', name: 'Conversations', icon: MessageCircleIcon },
+    { id: 'overview', name: 'Overview', icon: TrendingUp },
+    { id: 'agents', name: 'Agents', icon: Target },
+    { id: 'conversations', name: 'Conversations', icon: MessageCircle },
   ];
 
   return (
@@ -77,7 +82,7 @@ export default function MetricsDashboardPage() {
                   {new Date().toLocaleTimeString()}
                 </p>
               </div>
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] rounded-full animate-pulse"></div>
             </div>
           </div>
 
@@ -92,7 +97,7 @@ export default function MetricsDashboardPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center px-1 py-2 text-sm font-medium border-b-2 transition-colors ${
                       activeTab === tab.id
-                        ? 'border-blue-600 text-blue-600'
+                        ? 'border-gray-800 text-gray-800 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] px-3 py-2 rounded-t-lg'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >
@@ -108,7 +113,7 @@ export default function MetricsDashboardPage() {
 
       {/* Content */}
       <div className="p-6">
-        <div className="bg-beige border-accent-right border-accent-left border-accent-top border-accent shadow-sm">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right shadow-sm">
           <div className="p-6">
             {activeTab === 'overview' && (
               <OverviewTab 
@@ -149,7 +154,7 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
           value={analytics.total_conversations || 0}
           subtitle="All time"
           trend={{ direction: 'up', value: '+12%', period: 'vs last month' }}
-          icon={<MessageCircleIcon className="w-6 h-6" />}
+          icon={<MessageCircle className="w-6 h-6" />}
           color="blue"
         />
         <MetricCard
@@ -157,14 +162,14 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
           value={analytics.active_conversations || 0}
           subtitle="Currently active"
           trend={{ direction: 'up', value: '+2.3%', period: 'vs last week' }}
-          icon={<CheckCircleIcon className="w-6 h-6" />}
+          icon={<CheckCircle className="w-6 h-6" />}
           color="green"
         />
         <MetricCard
           title="Avg Messages"
           value={analytics.average_messages_per_conversation || '0.0'}
           subtitle="Per conversation"
-          icon={<TrendingUpIcon className="w-6 h-6" />}
+          icon={<TrendingUp className="w-6 h-6" />}
           color="purple"
         />
         <MetricCard
@@ -172,80 +177,77 @@ function OverviewTab({ dashboard, onConversationSelect, onScheduleSelect }) {
           value={analytics.total_messages || 0}
           subtitle="All conversations"
           trend={{ direction: 'up', value: '+15%', period: 'vs last week' }}
-          icon={<ClockIcon className="w-6 h-6" />}
+          icon={<MessageCircle className="w-6 h-6" />}
           color="orange"
         />
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
+        <div className="bg-beige p-6 border-accent border-accent-top border-accent-left border-accent-right">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Conversation Analytics</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Recent Activity (7d)</span>
-              <span className="font-semibold text-gray-900">{analytics.recent_activity_7d || 0}</span>
+              <span className="font-semibold text-gray-600">{analytics.recent_activity_7d || 0}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Active Conversations</span>
-              <span className="font-semibold text-green-600">{analytics.active_conversations || 0}</span>
+              <span className="font-semibold text-gray-600">{analytics.active_conversations || 0}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Total Messages</span>
-              <span className="font-semibold text-blue-600">{analytics.total_messages || 0}</span>
+              <span className="font-semibold text-gray-600">{analytics.total_messages || 0}</span>
             </div>
           </div>
         </div>
-        <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+        <div className="bg-beige p-6 border-accent border-accent-top border-accent-left border-accent-right">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">System Status</span>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                systemHealth.status === 'healthy' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-              }`}>
-                {systemHealth.status || 'healthy'}
-              </span>
+              <span className="text-gray-600">Recent Activity (7d)</span>
+              <span className="font-semibold text-gray-600">{analytics.recent_activity_7d || 0}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Uptime</span>
-              <span className="font-semibold text-gray-900">{systemHealth.uptime || '99.9%'}</span>
+              <span className="text-gray-600">Active Conversations</span>
+              <span className="font-semibold text-gray-600">{analytics.active_conversations || 0}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600">Response Time</span>
-              <span className="font-semibold text-gray-900">{systemHealth.response_time || '1.2s'}</span>
+              <span className="text-gray-600">Total Messages</span>
+              <span className="font-semibold text-gray-600">{analytics.total_messages || 0}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-beige " >
-        <SystemHealthCard health={systemHealth} />
-        
-        <div className="bg-beige p-6 border-accent-right border-accent-left border-accent-top border-accent">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 bg-beige">
+        <div className="bg-beige p-6 border-accent border-accent-top border-accent-left border-accent-right">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <button 
-              onClick={() => window.location.href = '#conversations'}
-              className="w-full flex items-center justify-between p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+              onClick={() => {
+                const setTab = window.__setMetricsActiveTab;
+                if (typeof setTab === 'function') setTab('conversations');
+              }}
+              className="w-full flex items-center justify-between p-3 bg-beige hover:bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]   rounded-lg transition-colors"
             >
               <div className="flex items-center space-x-3">
-                <MessageCircleIcon className="w-5 h-5 text-blue-600" />
-                <span className="text-sm font-medium text-blue-900">View All Conversations</span>
+                <MessageCircle className="w-5 h-5 text-gray-600" />
+                <span className="text-sm font-medium text-gray-600">View All Conversations</span>
               </div>
-              <span className="text-xs text-blue-600">{analytics.total_conversations || 0} total</span>
+              <span className="text-xs text-gray-600">{analytics.total_conversations || 0} total</span>
             </button>
             
             <button 
               onClick={() => console.log('Export data feature coming soon')}
-              className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+              className="w-full flex items-center justify-between p-3  hover:bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]  transition-colors"
             >
               <div className="flex items-center space-x-3">
-                <TrendingUpIcon className="w-5 h-5 text-gray-600" />
-                <span className="text-sm font-medium text-gray-900">Export Analytics</span>
+                <TrendingUp className="w-5 h-5 text-gray-600" />
+                <span className="text-sm font-medium text-gray-600">Export Analytics</span>
               </div>
-              <span className="text-xs text-gray-600">CSV/JSON</span>
+              <span className="text-xs text-gray-600">PDF</span>
             </button>
           </div>
         </div>

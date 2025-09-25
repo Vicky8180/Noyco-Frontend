@@ -7,12 +7,13 @@ import { LandingFooter } from './landing';
 export default function ClientLayoutWrapper({ children }) {
   const pathname = usePathname();
   const isDashboardPath = pathname?.startsWith('/dashboard');
+  const isMarketingFunnelPath = pathname?.startsWith('/marketing-funnel');
   
   return (
     <>
-      {!isDashboardPath && <Navbar />}
+      {!isDashboardPath && !isMarketingFunnelPath && <Navbar />}
       {children}
-      {!isDashboardPath && <LandingFooter />}
+      {!isDashboardPath && !isMarketingFunnelPath && <LandingFooter />}
     </>
   );
 } 

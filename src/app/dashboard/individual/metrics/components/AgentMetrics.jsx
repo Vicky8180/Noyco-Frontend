@@ -2,13 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useAgentMetrics } from '../../../../../store/hooks';
 import { 
-  TrendingUpIcon, 
-  TargetIcon, 
-  CalendarIcon, 
-  CheckCircleIcon, 
-  ClockIcon,
-  ArrowRightIcon,
-  InfoIcon 
+  TrendingUp, 
+  Target, 
+  Calendar, 
+  CheckCircle, 
+  Clock,
+  ArrowRight,
+  Info 
 } from 'lucide-react';
 import { MetricCard } from './MetricCards';
 import AgentGoalCharts from './AgentGoalCharts';
@@ -76,7 +76,7 @@ export default function AgentMetrics() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2  mx-auto mb-4"></div>
           <p className="text-gray-600">Loading agent metrics...</p>
         </div>
       </div>
@@ -114,8 +114,8 @@ export default function AgentMetrics() {
             {/* Step indicators */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  selectedAgent ? 'bg-green-500 text-white' : 'bg-blue-500 text-white'
+                <div className={`w-8 h-8  flex items-center justify-center text-sm font-medium ${
+                  selectedAgent ? 'bg-green-500 text-white' : 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]  '
                 }`}>
                   1
                 </div>
@@ -123,8 +123,8 @@ export default function AgentMetrics() {
               </div>
               <div className="w-6 h-0.5 bg-gray-300"></div>
               <div className="flex items-center space-x-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  selectedGoal ? 'bg-green-500 text-white' : selectedAgent ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-500'
+                <div className={`w-8 h-8  flex items-center justify-center text-sm font-medium ${
+                  selectedGoal ? 'bg-green-500 text-white' : selectedAgent ? 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]  ' : 'bg-gray-300 text-gray-500'
                 }`}>
                   2
                 </div>
@@ -137,9 +137,9 @@ export default function AgentMetrics() {
             <div className="flex items-center gap-3">
               {/* Agent Type Selector */}
               <div className="flex flex-col">
-                <label className="text-xs font-medium text-gray-600 mb-1">Agent Type</label>
+                <label className="text-xs font-medium text-gray-600 mb-1 ">Agent Type</label>
                 <select 
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-beige"
+                  className="px-4 py-2 border border-gray-300  text-sm focus:ring-2 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]   bg-beige border-accent border-accent-top border-accent-left border-accent-right"
                   value={selectedAgent}
                   onChange={handleAgentChange}
                 >
@@ -155,14 +155,14 @@ export default function AgentMetrics() {
               {/* Timeframe Selector */}
               <div className="flex flex-col">
                 <label className="text-xs font-medium text-gray-600 mb-1">Time Range</label>
-                <div className="flex bg-gray-100 rounded-lg p-1">
+                <div className="flex bg-beige border-accent border-accent-top border-accent-left border-accent-right p-1">
                   {timeframes.map((timeframe) => (
                     <button
                       key={timeframe.value}
                       onClick={() => handleTimeframeChange(timeframe.value)}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                      className={`px-3 py-1 text-xs font-medium transition-colors ${
                         selectedTimeframe === timeframe.value
-                          ? 'bg-beige text-gray-900 '
+                          ? 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-900'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
@@ -181,8 +181,8 @@ export default function AgentMetrics() {
         /* Agent Selection Prompt */
         <div className="'bg-beige  p-8 text-center ">
           <div className="max-w-md mx-auto">
-            <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <TargetIcon className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Target className="w-8 h-8 text-gray-800" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-3">Choose Your Agent</h3>
             <p className="text-gray-600 mb-6">
@@ -197,12 +197,12 @@ export default function AgentMetrics() {
                     <button
                       key={agent.agent_type}
                       onClick={() => setSelectedAgent(agent.agent_type)}
-                      className="flex items-center justify-between p-3 bg-beige rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all group"
+                      className="flex items-center justify-between p-3 bg-beige border-accent border-accent-top border-accent-left border-accent-right  hover:bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]   transition-all group"
                     >
-                      <span className="font-medium text-gray-900 group-hover:text-blue-700">
+                      <span className="font-medium text-gray-900 ">
                         {agent.display_name}
                       </span>
-                      <span className="text-sm text-gray-500 group-hover:text-blue-600">
+                      <span className="text-sm text-gray-500 ">
                         {agent.total_goals} goals
                       </span>
                     </button>
@@ -222,7 +222,7 @@ export default function AgentMetrics() {
         /* Loading State */
         <div className="bg-beige rounded-xl border border-gray-200 p-8">
           <div className="flex flex-col items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2  mb-4"></div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Loading Agent Data</h3>
             <p className="text-gray-600">Fetching {selectedAgent} metrics and analytics...</p>
           </div>
@@ -236,8 +236,8 @@ export default function AgentMetrics() {
               title="Total Goals"
               value={agentMetrics.summary.total_goals}
               subtitle={`Across ${agentMetrics.agents.length} agent instances`}
-              icon={<TargetIcon className="w-6 h-6" />}
-              color="blue"
+              icon={<Target className="w-6 h-6" />}
+              color="bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]  "
               trend={{
                 direction: 'up',
                 value: '+12%',
@@ -248,7 +248,7 @@ export default function AgentMetrics() {
               title="Active Goals"
               value={agentMetrics.summary.active_goals}
               subtitle={`${((agentMetrics.summary.active_goals / agentMetrics.summary.total_goals) * 100 || 0).toFixed(1)}% of total`}
-              icon={<ClockIcon className="w-6 h-6" />}
+              icon={<Clock className="w-6 h-6" />}
               color="green"
               trend={{
                 direction: 'up',
@@ -260,7 +260,7 @@ export default function AgentMetrics() {
               title="Completed Goals"
               value={agentMetrics.summary.completed_goals}
               subtitle={`${agentMetrics.summary.completion_rate.toFixed(1)}% completion rate`}
-              icon={<CheckCircleIcon className="w-6 h-6" />}
+              icon={<CheckCircle className="w-6 h-6" />}
               color="purple"
               trend={{
                 direction: 'up',
@@ -272,21 +272,21 @@ export default function AgentMetrics() {
               title="Avg Goals/Agent"
               value={agentMetrics.summary.average_goals_per_agent.toFixed(1)}
               subtitle="Goals per agent instance"
-              icon={<TrendingUpIcon className="w-6 h-6" />}
+              icon={<TrendingUp className="w-6 h-6" />}
               color="orange"
             />
           </div>
 
           {/* Instruction Banner */}
           {!selectedGoal && (
-            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-xl p-4">
+            <div className="bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC]  rounded-xl p-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10  rounded-full flex items-center justify-center">
                   <span className="text-white font-bold">2</span>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-900">Select a Goal for Detailed Analytics</h4>
-                  <p className="text-sm text-blue-700">
+                  <h4 className="font-medium ">Select a Goal for Detailed Analytics</h4>
+                  <p className="text-sm">
                     Click on any goal in the list below to view progress charts, check-in patterns, and mood trends.
                   </p>
                 </div>

@@ -60,6 +60,199 @@ const RecordButton = ({ isRecording, handleVoiceToggle }) => {
 };
 
 
+// Animated Amoeba/Blob component extracted from provided script
+const Amoeba = ({ gradient, duration, delay, sizeClass, isActive = false, isListening = false }) => {
+  // Adjust animation based on state
+  const getAnimationProps = () => {
+    if (isListening) {  
+      // Fast, echo-like spreading animation when listening
+      return {
+        borderRadius: [
+          '40% 60% 60% 40% / 50% 40% 60% 50%',
+          '70% 30% 30% 70% / 30% 70% 30% 70%',
+          '30% 70% 70% 30% / 70% 30% 70% 30%',
+          '60% 40% 40% 60% / 40% 60% 40% 60%',
+          '40% 60% 60% 40% / 50% 40% 60% 50%',
+        ],
+        scale: [1, 1.2, 0.7, 1.3, 0.85, 1],
+        x: [0, 60, -40, 80, -60, 0],
+        y: [0, -80, 60, -40, 70, 0],
+        transition: {
+          duration: duration * 0.25, // Much faster
+          delay: delay * 0.3,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }
+      };
+    } else if (isActive) {
+      // Medium speed when ready to talk
+      return {
+        borderRadius: [
+          '40% 60% 60% 40% / 50% 40% 60% 50%',
+          '65% 35% 35% 65% / 35% 65% 35% 65%',
+          '45% 55% 75% 25% / 25% 75% 25% 75%',
+          '75% 25% 25% 75% / 65% 35% 65% 35%',
+          '40% 60% 60% 40% / 50% 40% 60% 50%',
+        ],
+        scale: [1, 1.15, 0.8, 1.2, 0.9, 1],
+        x: [0, 45, -30, 60, -45, 0],
+        y: [0, -60, 45, -30, 50, 0],
+        transition: {
+          duration: duration * 0.5, // Faster than idle
+          delay: delay * 0.6,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }
+      };
+    } else {
+      // Default idle animation
+      return {
+        borderRadius: [
+          '40% 60% 60% 40% / 50% 40% 60% 50%',
+          '60% 40% 40% 60% / 40% 60% 40% 60%',
+          '50% 50% 70% 30% / 30% 70% 30% 70%',
+          '70% 30% 30% 70% / 60% 40% 60% 40%',
+          '40% 60% 60% 40% / 50% 40% 60% 50%',
+        ],
+        scale: [1, 1.1, 0.9, 1.05, 1],
+        x: [0, 25, -25, 20, 0],
+        y: [0, -20, 25, -15, 0],
+        transition: {
+          duration,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay,
+        }
+      };
+    }
+  };
+
+  const animationProps = getAnimationProps();
+
+  return (
+    <motion.div
+      className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 ${sizeClass}`}
+      style={{
+        background: gradient,
+        filter: isListening ? 'blur(35px)' : isActive ? 'blur(42px)' : 'blur(50px)',
+        opacity: isListening ? 0.8 : isActive ? 0.7 : 0.55,
+      }}
+      animate={{
+        borderRadius: animationProps.borderRadius,
+        scale: animationProps.scale,
+        x: animationProps.x,
+        y: animationProps.y,
+      }}
+      transition={animationProps.transition}
+    />
+  );
+};
+
+// Mic Icon Button component extracted from provided script
+const MicIconButton = ({ onClick, isActive, isConnecting, isListening }) => {
+  const getButtonState = () => {
+    if (isConnecting) return 'connecting';
+    if (isListening) return 'listening';
+    if (isActive) return 'active';
+    return 'idle';
+  };
+
+  const buttonState = getButtonState();
+
+  const getButtonStyles = () => {
+    switch (buttonState) {
+      case 'connecting':
+        return 'text-yellow-300 drop-shadow-[0_0_20px_rgba(253,224,71,0.5)]';
+      case 'listening':
+        return 'text-green-300 drop-shadow-[0_0_20px_rgba(134,239,172,0.8)] animate-pulse';
+      case 'active':
+        return 'text-blue-300 drop-shadow-[0_0_20px_rgba(147,197,253,0.6)]';
+      default:
+        return 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]';
+    }
+  };
+
+  const getRingAnimation = () => {
+    switch (buttonState) {
+      case 'connecting':
+        return 'animate-ping';
+      case 'listening':
+        return 'animate-pulse';
+      case 'active':
+        return 'animate-pulse';
+      default:
+        return '';
+    }
+  };
+
+  return (
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ zIndex: 20 }}>
+      {/* Outer ring for visual feedback */}
+      {(isActive || isConnecting || isListening) && (
+        <div 
+          className={`absolute inset-0 rounded-full border-2 ${
+            buttonState === 'connecting' ? 'border-yellow-300/50' :
+            buttonState === 'listening' ? 'border-green-300/50' :
+            'border-blue-300/50'
+          } ${getRingAnimation()}`}
+          style={{ 
+            width: '80px', 
+            height: '80px',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)'
+          }}
+        />
+      )}
+      
+      {/* Status indicator text */}
+      {buttonState !== 'idle' && (
+        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-center">
+          <div className="text-xs font-medium px-3 py-1.5 rounded-full bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 backdrop-blur-sm shadow-md">
+            {buttonState === 'connecting' && 'Connecting...'}
+            {buttonState === 'listening' && '🎤 Listening'}
+            {buttonState === 'active' && 'Ready to talk'}
+          </div>
+        </div>
+      )}
+
+      <motion.button
+        className={`flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 ${getButtonStyles()}`}
+        whileHover={{ scale: buttonState === 'idle' ? 1.1 : 1.05 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={onClick}
+        disabled={isConnecting}
+      > 
+        {/* Heroicons outline microphone */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.8"
+          stroke="currentColor"
+          className={`w-10 h-10 transition-all duration-300 ${
+            buttonState === 'listening' ? 'animate-pulse' : ''
+          }`}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 2.25a3.75 3.75 0 00-3.75 3.75v6a3.75 3.75 0 007.5 0v-6A3.75 3.75 0 0012 2.25z"
+          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5v.75a7.5 7.5 0 01-15 0v-.75M12 21v-3" />
+        </svg>
+
+        {/* Loading spinner for connecting state */}
+        {isConnecting && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-yellow-300/30 border-t-yellow-300 rounded-full animate-spin"></div>
+          </div>
+        )}
+      </motion.button>
+    </div>
+  );
+};
+
 const AmebaButton = ({ isRecording, handleVoiceToggle }) => {
   return (
  <motion.button
@@ -185,6 +378,7 @@ const ImprovedVoiceAssistant = () => {
     if (sessionDataRef.current && activeProfile && sessionDataRef.current.user_profile_id === 'profile_default') {
       console.log('Updating session with real profile:', activeProfile.user_profile_id);
       sessionDataRef.current.user_profile_id = activeProfile.user_profile_id;
+      return; // prevent second createSession
     }
   }, [user?.role_entity_id, profiles, currentProfile, profilesLoading, isAuthenticated]);
 
@@ -227,7 +421,7 @@ const ImprovedVoiceAssistant = () => {
         echo_cancellation: true,
         noise_suppression: true,
         auto_gain_control: true,
-        sample_rate: 16000,
+        sample_rate: 44100,
         interruption_enabled: true
       },
       // Add force_fresh flag to ensure backend treats this as completely new
@@ -640,9 +834,12 @@ const ImprovedVoiceAssistant = () => {
       console.log('Session data user_profile_id:', currentSessionData.user_profile_id);
       console.log('Active profile user_profile_id:', activeProfile?.user_profile_id);
 
+      // Always forward routing information so the orchestrator can find the correct micro-service
       const payload = {
         session_id: currentSessionData.session_id,
-        text: text,
+        agent_instance_id: currentSessionData.agent_instance_id,   // NEW – required by orchestrator
+        detected_agent:     currentSessionData.detected_agent,     // NEW – required by orchestrator
+        text,
         conversation_id: currentSessionData.conversation_id,
         individual_id: currentSessionData.individual_id || user?.role_entity_id || 'individual_default',
         user_profile_id: userProfileId
@@ -662,6 +859,13 @@ const ImprovedVoiceAssistant = () => {
       console.log('Voice API response:', result);
 
       if (result.status === 'success') {
+        // Persist latest routing information for subsequent turns
+        if (result.agent_instance_id) {
+          sessionDataRef.current.agent_instance_id = result.agent_instance_id;
+        }
+        if (result.detected_agent) {
+          sessionDataRef.current.detected_agent = result.detected_agent;
+        }
         const responseText = result.assistant_response;
         
         // Check if this is a connecting message
@@ -683,7 +887,11 @@ const ImprovedVoiceAssistant = () => {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                  ...payload,
+                  agent_instance_id: sessionDataRef.current.agent_instance_id,
+                  detected_agent: sessionDataRef.current.detected_agent
+                })
               });
 
               const continueResult = await continueResponse.json();
@@ -1105,23 +1313,23 @@ const ImprovedVoiceAssistant = () => {
   // Show typing effects first, then current conversation
   if (userTyping.isActive || botTyping.isActive) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8 lg:space-y-12">
         {userTyping.isActive && (
           <div className="text-center">
-            <div className="inline-block bg-[rgb(31,77,143)]/10 px-6 py-4 rounded-2xl backdrop-blur-sm">
-              <div className="text-[rgb(31,77,143)] text-lg font-medium">
+            <div className="inline-block bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] px-8 py-6 lg:px-12 lg:py-8 rounded-2xl backdrop-blur-sm border border-gray-300/30 shadow-lg max-w-2xl">
+              <div className="text-gray-800 text-sm lg:text-base font-medium">
                 {userTyping.text}
-                <span className="inline-block w-0.5 h-5 bg-[rgb(31,77,143)] ml-1 animate-pulse" />
+                <span className="inline-block w-0.5 h-4 lg:h-5 bg-gray-700 ml-1 animate-pulse" />
               </div>
             </div>
           </div>
         )}
         {botTyping.isActive && (
           <div className="text-center">
-            <div className="inline-block bg-purple-800/10 px-6 py-4 rounded-2xl backdrop-blur-sm">
-              <div className="text-purple-800 text-lg font-medium">
+            <div className="inline-block bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] px-8 py-6 lg:px-12 lg:py-8 rounded-2xl backdrop-blur-sm border border-gray-300/30 shadow-lg max-w-2xl">
+              <div className="text-gray-800 text-sm lg:text-base font-medium">
                 {botTyping.text}
-                <span className="inline-block w-0.5 h-5 bg-purple-600 ml-1 animate-pulse" />
+                <span className="inline-block w-0.5 h-4 lg:h-5 bg-gray-700 ml-1 animate-pulse" />
               </div>
             </div>
           </div>
@@ -1130,38 +1338,29 @@ const ImprovedVoiceAssistant = () => {
     );
   }
 
-  // Show last conversation when not actively typing
+  // Show last conversation when not actively typing - only show the most recent message
   if (currentConversation && !userTyping.isActive && !botTyping.isActive) {
-    return (
-      <div className="space-y-6 opacity-80">
-        <div className="text-center">
-          <div className="inline-block bg-[rgb(31,77,143)]/5 px-6 py-4 rounded-2xl backdrop-blur-sm">
-            <div className="text-[rgb(31,77,143)] text-lg">
-              {currentConversation.user}
+    const hasUserMessage = currentConversation.user && currentConversation.user.trim();
+    const hasBotMessage = currentConversation.bot && currentConversation.bot.trim();
+    
+    // Show only the most recent message (prioritize bot response if both exist)
+    const messageToShow = hasBotMessage ? currentConversation.bot : (hasUserMessage ? currentConversation.user : null);
+    
+    if (messageToShow) {
+      return (
+        <div className="text-center opacity-95">
+          <div className="inline-block bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] px-6 py-4 lg:px-8 lg:py-5 rounded-2xl backdrop-blur-sm border border-gray-300/20 shadow-md max-w-2xl">
+            <div className="text-gray-800 text-sm lg:text-base">
+              {messageToShow}
             </div>
           </div>
         </div>
-        <div className="text-center">
-          <div className="inline-block bg-purple-800/5 px-6 py-4 rounded-2xl backdrop-blur-sm">
-            <div className="text-purple-800 text-lg">
-              {currentConversation.bot}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+      );
+    }
   }
 
-  // Default empty state
-  return (
-    <div className="text-center text-gray-600 py-8">
-      <div className="text-6xl mb-4">🎙️</div>
-      <div className="text-xl font-light mb-2">Ready to chat</div>
-      <div className="text-gray-500">
-        Press play to start your voice conversation
-      </div>
-    </div>
-  );
+  // Default empty state - simplified without the removed texts
+  return null;
 };
 
   // Check if profiles are ready - more lenient check
@@ -1170,15 +1369,15 @@ const ImprovedVoiceAssistant = () => {
   const canStartSession = isAuthenticated && user && isProfileReady;
 
   return (
-   <div className="min-h-screen bg-[#f8f7f1] flex flex-col items-center justify-center p-4 sm:p-6">
+   <div className="min-h-screen bg-[#f8f7f1] flex flex-col items-center justify-center p-3 sm:p-4 lg:p-6">
 
       <div className="w-full max-w-2xl mx-auto">
         
         {/* Profile Loading State */}
         {profilesLoading && (
           <div className="text-center mb-8">
-            <div className="inline-block bg-blue-50 px-6 py-4 rounded-2xl backdrop-blur-sm">
-              <div className="text-blue-800 text-lg font-medium">
+            <div className="inline-block bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] px-6 py-4 rounded-2xl backdrop-blur-sm shadow-lg">
+              <div className="text-gray-800 text-lg font-medium">
                 Loading your profile...
               </div>
             </div>
@@ -1188,16 +1387,16 @@ const ImprovedVoiceAssistant = () => {
         {/* No Profile Warning */}
         {!profilesLoading && !activeProfile && (
           <div className="text-center mb-8">
-            <div className="inline-block bg-yellow-50 px-6 py-4 rounded-2xl backdrop-blur-sm">
-              <div className="text-yellow-800 text-lg font-medium">
+            <div className="inline-block bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] px-6 py-4 rounded-2xl backdrop-blur-sm shadow-lg">
+              <div className="text-gray-800 text-lg font-medium">
                 Profile not found
               </div>
-              <div className="text-yellow-600 text-sm mt-1">
+              <div className="text-gray-700 text-sm mt-1">
                 Please refresh the page or check your profile settings.
               </div>
               <button 
                 onClick={fetchProfiles}
-                className="mt-2 px-4 py-2 bg-yellow-600 text-white rounded-lg text-sm hover:bg-yellow-700 transition-colors"
+                className="mt-2 px-4 py-2 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 rounded-lg text-sm hover:shadow-md transition-all duration-200 border border-gray-300/30"
               >
                 Retry Loading Profile
               </button>
@@ -1205,37 +1404,53 @@ const ImprovedVoiceAssistant = () => {
           </div>
         )}
         
-        {/* Main Control Button - Always Centered */}
-        <div className="flex flex-col items-center mb-8">
-          {/* <button
-            onClick={isRecording ? stopVoiceAssistant : startVoiceAssistant}
-            className={`w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full flex items-center justify-center text-white transition-all duration-500 transform hover:scale-105 active:scale-95 shadow-2xl relative ${
-              isRecording 
-                ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600' 
-                : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600'
-            }`}
-            style={{
-              boxShadow: isRecording 
-                ? '0 20px 40px rgba(239, 68, 68, 0.4)' 
-                : '0 20px 40px rgba(59, 130, 246, 0.4)'
-            }}
-          >
-            {isRecording ? <PauseIcon /> : <PlayIcon />}
-       
-            {isRecording && (
-              <>
-                <div className="absolute inset-0 rounded-full border border-white opacity-30 animate-ping" />
-                <div className="absolute inset-0 rounded-full border border-white opacity-20 animate-ping" style={{ animationDelay: '0.5s' }} />
-              </>
-            )}
-          </button> */}
-
+        {/* Main Control Button with Animated Blobs - Always Centered, shifted up on large screens */}
+        <div className="flex flex-col items-center mb-4 lg:mb-6 lg:-mt-12">
           {/* Always show the voice button when user is authenticated */}
           {isAuthenticated && user ? (
-            <AmebaButton 
-              isRecording={isRecording} 
-              handleVoiceToggle={handleVoiceToggle}
-            />
+            <div className="relative w-full max-w-[min(80vw,70vh,520px)] aspect-square">
+              {/* Gradient Blobs Container - Responsive */}
+              <Amoeba
+                gradient="linear-gradient(135deg, #facc15 0%, #f97316 100%)"
+                duration={12}
+                delay={0}
+                sizeClass="w-[clamp(140px,45%,380px)] aspect-square"
+                isActive={isRecording}
+                isListening={isListening}
+              />
+              <Amoeba
+                gradient="linear-gradient(135deg, #a855f7 0%, #ef4444 100%)"
+                duration={16}
+                delay={2}
+                sizeClass="w-[clamp(160px,50%,420px)] aspect-square"
+                isActive={isRecording}
+                isListening={isListening}
+              />
+              <Amoeba
+                gradient="linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)"
+                duration={14}
+                delay={1}
+                sizeClass="w-[clamp(120px,40%,350px)] aspect-square"
+                isActive={isRecording}
+                isListening={isListening}
+              />
+              <Amoeba
+                gradient="linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)"
+                duration={18}
+                delay={3}
+                sizeClass="w-[clamp(140px,45%,395px)] aspect-square"
+                isActive={isRecording}
+                isListening={isListening}
+              />
+
+              {/* Mic icon overlay - Centered within the blob container */}
+              <MicIconButton 
+                onClick={handleVoiceToggle} 
+                isActive={isRecording}
+                isConnecting={isWaiting}
+                isListening={isListening}
+              />
+            </div>
           ) : (
             <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-gray-300 flex items-center justify-center opacity-50">
               <div className="text-gray-500 text-sm text-center">
@@ -1244,40 +1459,80 @@ const ImprovedVoiceAssistant = () => {
             </div>
           )}
 
-<div className="mt-4 text-[#15345fff] text-lg sm:text-xl font-medium text-center">
-  {!isAuthenticated || !user
-    ? 'Please login to start' 
-    : (isRecording ? 'Voice Assistant Active' : 'Start Conversation')
-  }
-</div>
+{/* Status text under the blob - Similar to provided script */}
+          <div className="mt-2 lg:mt-3 text-center">
+            {!isAuthenticated || !user ? (
+              <div className="text-[#15345fff] text-lg sm:text-xl font-medium">
+                Please login to start
+              </div>
+            ) : !isRecording ? (
+              // Empty state when not recording - no text shown
+              null
+            ) : (
+              <>
+                {/* Ready to talk text above the blob for better spacing */}
+                {(isRecording && !isListening && !isBotSpeaking && !isProcessing && !isWaiting) && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="mb-1"
+                  >
+                    <div className="text-xs font-medium text-gray-800 mb-0.5">
+                      Ready to talk
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      Start speaking now...
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Listening text above the blob for better spacing */}
+                {isListening && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="mb-1"
+                  >
+                    <div className="text-xs font-medium text-gray-800 mb-0.5 animate-pulse">
+                      🎤 Listening...
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      I can hear you
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Default status when recording but in other states */}
+                {isRecording && (isWaiting || isBotSpeaking || isProcessing) && (
+                  <div className="text-[#15345fff] text-sm font-medium">
+                    Voice Assistant Active
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
 
 
          
-          {/* Single Dynamic Status Indicator */}
+          {/* Single Dynamic Status Indicator - moved above blob */}
           {isRecording && (
-            <div className="mt-4 text-center">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all text-sm font-medium ${
-                isBotSpeaking 
-                  ? 'bg-purple-500 bg-opacity-30 text-purple-200' 
-                  : isProcessing
-                    ? 'bg-yellow-500 bg-opacity-30 text-yellow-200'
-                    : isListening 
-                      ? 'bg-blue-500 bg-opacity-30 text-blue-200'
-                      : isWaiting
-                        ? 'bg-orange-500 bg-opacity-30 text-orange-200'
-                        : 'bg-gray-700 text-gray-300'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${
+            <div className="mb-2 text-center">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-xs font-medium bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 backdrop-blur-sm shadow-md">
+                <div className={`w-1.5 h-1.5 rounded-full ${
                   isBotSpeaking 
-                    ? 'bg-purple-400 animate-pulse' 
+                    ? 'bg-purple-600 animate-pulse' 
                     : isProcessing
-                      ? 'bg-yellow-400 animate-pulse'
+                      ? 'bg-yellow-600 animate-pulse'
                       : isListening 
-                        ? 'bg-blue-400 animate-pulse'
+                        ? 'bg-blue-600 animate-pulse'
                         : isWaiting
-                          ? 'bg-orange-400 animate-pulse'
-                          : 'bg-gray-500'
+                          ? 'bg-orange-600 animate-pulse'
+                          : 'bg-gray-600'
                 }`} />
                 <span>
                   {isBotSpeaking 
@@ -1300,20 +1555,20 @@ const ImprovedVoiceAssistant = () => {
 
         {/* Waveform Visualizer */}
         {isRecording && (
-          <div className="mb-6">
+          <div className="mb-3 lg:mb-4">
             <WaveformVisualizer isActive={isListening || isBotSpeaking} />
           </div>
         )}
 
-        {/* Conversation Display - Responsive */}
-      <div className="backdrop-blur-xl rounded-3xl p-4 sm:p-6 lg:p-8 min-h-64 sm:min-h-80 ">
-  <ConversationDisplay />
-</div>
+        {/* Conversation Display - Better spacing for large screens */}
+        <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-4 sm:p-6 lg:p-8 min-h-60 sm:min-h-72 lg:min-h-80 border border-white/10 w-full max-w-4xl mx-auto">
+          <ConversationDisplay />
+        </div>
 
         {/* Instructions */}
         {isRecording && (
-          <div className="mt-6 text-center text-gray-300">
-            <div className="text-base sm:text-lg font-light">Speak naturally • Assistant responds in real-time</div>
+          <div className="mt-3 lg:mt-4 text-center text-gray-300">
+            <div className="text-sm sm:text-base font-light">Speak naturally • Assistant responds in real-time</div>
           </div>
         )}
       </div>
@@ -1322,3 +1577,35 @@ const ImprovedVoiceAssistant = () => {
 };
 
 export default ImprovedVoiceAssistant;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

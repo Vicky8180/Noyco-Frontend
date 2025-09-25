@@ -102,16 +102,16 @@ const navItems = [
     tooltip: "AI Agent Configuration",
     subItems: [] 
   },
-  {
-    name: "Schedule",
-    href: "/dashboard/individual/schedule",
-    icon: icons.schedule,
-    tooltip: "Schedule Management",
-    subItems: [
-      { name: "Track", key: "track", icon: icons.track, tooltip: "Location Tracking" },
-      { name: "Schedule", key: "schedule", icon: icons.scheduleItem, tooltip: "Time Scheduling" }
-    ]
-  },
+  // {
+  //   name: "Schedule",
+  //   href: "/dashboard/individual/schedule",
+  //   icon: icons.schedule,
+  //   tooltip: "Schedule Management",
+  //   subItems: [
+  //     { name: "Track", key: "track", icon: icons.track, tooltip: "Location Tracking" },
+  //     { name: "Schedule", key: "schedule", icon: icons.scheduleItem, tooltip: "Time Scheduling" }
+  //   ]
+  // },
  
 ];
 
@@ -142,7 +142,7 @@ const UserProfileDropdown = ({ isOpen, onClose, user, onLogout }) => {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
-              {user?.email || 'User'}
+              {user?.name || 'User'}
             </p>
             <p className="text-xs text-gray-500 capitalize">
               {user?.role || 'Individual'}

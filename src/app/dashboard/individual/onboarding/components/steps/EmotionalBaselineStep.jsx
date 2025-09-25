@@ -41,9 +41,9 @@ const EmotionalBaselineStep = ({ data, updateData, errors, onNext }) => {
           <motion.button
             key={baseline.value}
             onClick={() => handleBaselineSelect(baseline.value)}
-            className={`w-full p-4 border-2 rounded-xl text-left transition-colors hover:border-blue-600 hover:bg-blue-50 ${
+            className={`w-full p-4 border-2 rounded-xl text-left transition-colors  ${
               data.emotional_baseline === baseline.value
-                ? 'border-blue-600 bg-blue-50'
+                ? 'border-gray-600 bg-gray-50'
                 : 'border-gray-200'
             }`}
             whileHover={{ scale: 1.02 }}
@@ -56,7 +56,7 @@ const EmotionalBaselineStep = ({ data, updateData, errors, onNext }) => {
                 <div className="text-sm text-gray-600 text-left">{baseline.description}</div>
               </div>
               {data.emotional_baseline === baseline.value && (
-                <span className="text-blue-600">✓</span>
+                <span className="text-gray-600">✓</span>
               )}
             </div>
           </motion.button>

@@ -114,8 +114,8 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
             value={data.profile_name || ""}
             onChange={(e) => handleRequiredFieldChange("profile_name", e.target.value)}
             placeholder="e.g., Health Assistant, Emergency Contact"
-            className={`w-full px-3 py-2 border focus:ring-2 focus:ring-gray-400 focus:border-gray-400 ${
-              errors.profile_name ? "border-red-500" : "border-accent"
+            className={`w-full px-3 py-2 focus:ring-2 focus:ring-gray-400 focus:border-gray-400 ${
+              errors.profile_name ? "border-red-500" : "border-accent border-accent-top border-accent-left border-accent-right"
             }`}
             required
           />
@@ -133,8 +133,8 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
             value={data.name || ""}
             onChange={(e) => handleRequiredFieldChange("name", e.target.value)}
             placeholder="e.g., Dr. Sarah, Alex"
-            className={`w-full px-3 py-2 border focus:ring-2 focus:ring-gray-400 focus:border-gray-400 ${
-              errors.name ? "border-red-500" : "border-accent"
+            className={`w-full px-3 py-2 focus:ring-2 focus:ring-gray-400 focus:border-gray-400 ${
+              errors.name ? "border-red-500" : "border-accent border-accent-top border-accent-left border-accent-right"
             }`}
             required
           />
@@ -156,7 +156,7 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
             placeholder="e.g., 35"
             min="1"
             max="120"
-            className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+            className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
           />
         </div>
 
@@ -170,8 +170,8 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
             value={data.phone || ""}
             onChange={(e) => handleRequiredFieldChange("phone", e.target.value)}
             placeholder="e.g., +1 234 567 8900"
-            className={`w-full px-3 py-2 border focus:ring-2 focus:ring-gray-400 focus:border-gray-400 ${
-              errors.phone ? "border-red-500" : "border-accent"
+            className={`w-full px-3 py-2 focus:ring-2 focus:ring-gray-400 focus:border-gray-400 ${
+              errors.phone ? "border-red-500" : "border-accent border-accent-top border-accent-left border-accent-right"
             }`}
             required
           />
@@ -186,7 +186,7 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
           <select
             value={data.gender || ""}
             onChange={(e) => handleInputChange("gender", e.target.value)}
-            className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+            className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
           >
             {genderOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -202,7 +202,7 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
           <select
             value={data.language || "English"}
             onChange={(e) => handleInputChange("language", e.target.value)}
-            className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+            className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
           >
             {languageOptions.map((lang) => (
               <option key={lang} value={lang}>
@@ -222,7 +222,7 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
             value={data.location || ""}
             onChange={(e) => handleInputChange("location", e.target.value)}
             placeholder="e.g., New York, London"
-            className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+            className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
           />
         </div>
 
@@ -231,7 +231,7 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
           <select
             value={data.emotional_baseline || ""}
             onChange={(e) => handleInputChange("emotional_baseline", e.target.value)}
-            className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+            className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 bg-beige hover:bg-gradient-to-r hover:from-[#E6D3E7] hover:via-[#F6D9D5] hover:to-[#D6E3EC]"
           >
             <option value="">Select baseline mood</option>
             {emotionalBaselines.map((baseline) => (
@@ -251,7 +251,7 @@ const BasicInfoForm = ({ data = {}, updateData }) => {
           onChange={(e) => handleInputChange("description", e.target.value)}
           placeholder="Describe the purpose and personality of this AI agent..."
           rows={3}
-          className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 resize-none"
+        className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 resize-none"
         />
       </div>
     </div>

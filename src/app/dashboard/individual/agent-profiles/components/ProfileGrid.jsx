@@ -1,6 +1,7 @@
 "use client";
 
-import { EyeIcon, PencilIcon, TrashIcon, ChatBubbleLeftRightIcon, EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, PencilIcon, TrashIcon, EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { MessageCircle, Clock } from 'lucide-react';
 import { useState } from "react";
 
 const ProfileGrid = ({ profiles, onViewProfile, onEditProfile, onDeleteProfile }) => {
@@ -60,7 +61,7 @@ const ProfileGrid = ({ profiles, onViewProfile, onEditProfile, onDeleteProfile }
         {profiles.map((profile) => (
           <div
             key={profile.id}
-            className="group bg-beige p-5 shadow-sm hover:shadow-lg border border-accent hover:border-gray-300 transition-all duration-200 hover:scale-[1.02] cursor-pointer relative"
+            className="group bg-beige p-5 shadow-sm hover:shadow-lg border-accent border-accent-top border-accent-left border-accent-right hover:border-gray-300 transition-all duration-200 hover:scale-[1.02] cursor-pointer relative"
             onClick={(e) => handleCardClick(profile, e)}
           >
             {/* Header */}
@@ -89,7 +90,7 @@ const ProfileGrid = ({ profiles, onViewProfile, onEditProfile, onDeleteProfile }
                 </button>
                 
                 {openMenuId === profile.id && (
-                  <div className="menu-dropdown absolute right-0 top-10 bg-beige shadow-lg border border-accent py-1 z-10 min-w-[130px]">
+                  <div className="menu-dropdown absolute right-0 top-10 bg-beige shadow-lg border-accent border-accent-top border-accent-left border-accent-right py-1 z-10 min-w-[130px]">
                     <button
                       onClick={(e) => handleMenuAction('edit', profile, e)}
                       className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
@@ -118,14 +119,14 @@ const ProfileGrid = ({ profiles, onViewProfile, onEditProfile, onDeleteProfile }
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="bg-beige p-3">
                 <div className="flex items-center gap-2">
-                  <ChatBubbleLeftRightIcon className="w-4 h-4 text-blue-500" />
+                  <MessageCircle className="w-4 h-4 text-blue-500" />
                   <span className="text-xs text-gray-600">Conversations</span>
                 </div>
                 <p className="font-semibold text-gray-900 text-base mt-1">{profile.conversation_count}</p>
               </div>
               <div className="bg-beige p-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-4 h-4 text-green-500 flex items-center justify-center text-sm">🕒</span>
+                  <Clock className="w-4 h-4 text-green-500" />
                   <span className="text-xs text-gray-600">Last Used</span>
                 </div>
                 <p className="font-semibold text-gray-900 text-sm mt-1">{formatLastUsed(profile.last_used)}</p>
@@ -138,17 +139,17 @@ const ProfileGrid = ({ profiles, onViewProfile, onEditProfile, onDeleteProfile }
                 {profile.personality_traits?.slice(0, 2).map((trait, index) => (
                   <span
                     key={index}
-                    className="px-2.5 py-1 bg-blue-50 text-blue-600 text-xs font-medium"
+                    className="px-2.5 py-1 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 text-xs font-medium"
                   >
-                    {trait}
+                    {trait.charAt(0).toUpperCase() + trait.slice(1).toLowerCase()}
                   </span>
                 ))}
                 {profile.interests?.slice(0, 1).map((interest, index) => (
                   <span
                     key={`interest-${index}`}
-                    className="px-2.5 py-1 bg-green-50 text-green-600 text-xs font-medium"
+                    className="px-2.5 py-1 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 text-xs font-medium"
                   >
-                    {interest}
+                    {interest.charAt(0).toUpperCase() + interest.slice(1).toLowerCase()}
                   </span>
                 ))}
                 {(profile.personality_traits?.length > 2 || profile.interests?.length > 1) && (

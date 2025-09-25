@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { CalendarIcon, CheckCircleIcon, ClockIcon, TrendingUpIcon, AlertCircleIcon, HeartIcon } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, TrendingUp, AlertTriangle, Heart } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
 
 export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelect, timeframe }) {
@@ -8,7 +8,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
 
   if (!agentMetrics || !agentMetrics.agents) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Goals Overview</h3>
         <p className="text-gray-500">No agent data available</p>
       </div>
@@ -22,11 +22,11 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
   const getStatusColor = (status) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 border-accent';
       case 'active':
         return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'paused':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 border-accent';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
@@ -35,13 +35,13 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
   const getStatusIcon = (status) => {
     switch (status) {
       case 'completed':
-        return <CheckCircleIcon className="w-4 h-4" />;
+        return <CheckCircle className="w-4 h-4" />;
       case 'active':
-        return <ClockIcon className="w-4 h-4" />;
+        return <Clock className="w-4 h-4" />;
       case 'paused':
-        return <AlertCircleIcon className="w-4 h-4" />;
+        return <AlertTriangle className="w-4 h-4" />;
       default:
-        return <ClockIcon className="w-4 h-4" />;
+        return <Clock className="w-4 h-4" />;
     }
   };
 
@@ -60,7 +60,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
     };
     
     return (
-      <HeartIcon className={`w-4 h-4 ${moodColors[mood?.toLowerCase()] || 'text-gray-400'}`} />
+      <Heart className={`w-4 h-4 ${moodColors[mood?.toLowerCase()] || 'text-gray-400'}`} />
     );
   };
 
@@ -91,7 +91,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right overflow-hidden">
       <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
         <div className="flex items-center justify-between">
           <div>
@@ -100,7 +100,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
               {agentMetrics.summary.total_goals} total goals across {agentMetrics.agents.length} agent instances
             </p>
           </div>
-          <div className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full border">
+          <div className="text-xs text-gray-500 bg-beige px-3 py-1 border">
             Click goals for details
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <TrendingUpIcon className="w-5 h-5 text-blue-600" />
+                    <TrendingUp className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900">
@@ -157,8 +157,8 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
                     key={goal.goal_id}
                     className={`p-4 border-b border-gray-200 last:border-b-0 cursor-pointer transition-all duration-200 ${
                       selectedGoal?.goal_id === goal.goal_id 
-                        ? 'bg-blue-50 border-blue-200 shadow-sm' 
-                        : 'hover:bg-white hover:shadow-sm'
+                        ? 'bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] border-blue-200 shadow-sm' 
+                        : 'hover:bg-beige hover:shadow-sm'
                     }`}
                     onClick={() => onGoalSelect(goal)}
                   >
@@ -278,7 +278,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
 
                 {agent.goals.length === 0 && (
                   <div className="p-4 text-center text-gray-500">
-                    <CalendarIcon className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                    <Calendar className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                     <p className="text-sm">No goals found for this agent</p>
                   </div>
                 )}
@@ -289,7 +289,7 @@ export default function AgentGoalsList({ agentMetrics, selectedGoal, onGoalSelec
 
         {agentMetrics.agents.length === 0 && (
           <div className="p-8 text-center text-gray-500">
-            <TrendingUpIcon className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+            <TrendingUp className="w-12 h-12 mx-auto mb-4 text-gray-300" />
             <h4 className="font-medium text-gray-900 mb-2">No agents found</h4>
             <p className="text-sm">Create some goals to get started with agent tracking.</p>
           </div>

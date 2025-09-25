@@ -1,0 +1,79 @@
+/* Marketing Funnel Specific Styles */
+
+@keyframes marketing-pulse-slow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes marketing-gentle-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+}
+
+@keyframes marketing-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.marketing-pulse-slow {
+  animation: marketing-pulse-slow 6s ease-in-out infinite;
+}
+
+.marketing-gentle-float {
+  animation: marketing-gentle-float 8s ease-in-out infinite;
+}
+
+.marketing-breathe {
+  animation: marketing-breathe 4s ease-in-out infinite;
+}
+
+/* Glassmorphism enhancements */
+.marketing-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.marketing-glass:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Custom scrollbar for horizontal scroll */
+.marketing-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.marketing-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.marketing-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.marketing-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}

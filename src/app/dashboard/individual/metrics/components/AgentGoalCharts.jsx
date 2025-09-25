@@ -119,7 +119,7 @@ export default function AgentGoalCharts({ agentMetrics, selectedGoal, selectedAg
 
   if (!agentMetrics) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Goal Analytics</h3>
         <p className="text-gray-500">No data available</p>
       </div>
@@ -237,7 +237,7 @@ export default function AgentGoalCharts({ agentMetrics, selectedGoal, selectedAg
       {/* Overview Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Goal Status Distribution */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-6">
           <h4 className="text-lg font-semibold text-gray-900 mb-4">Goal Status Distribution</h4>
           <div className="h-48">
             <Doughnut 
@@ -257,7 +257,7 @@ export default function AgentGoalCharts({ agentMetrics, selectedGoal, selectedAg
         </div>
 
         {/* Streak Performance */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-6">
           <h4 className="text-lg font-semibold text-gray-900 mb-4">Current Streaks</h4>
           <div className="h-48">
             <Bar 
@@ -285,7 +285,7 @@ export default function AgentGoalCharts({ agentMetrics, selectedGoal, selectedAg
 
       {/* Detailed Goal Analysis */}
       {selectedGoal ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h4 className="text-lg font-semibold text-gray-900">
@@ -393,7 +393,7 @@ export default function AgentGoalCharts({ agentMetrics, selectedGoal, selectedAg
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 p-8">
+        <div className="bg-beige border-accent border-accent-top border-accent-left border-accent-right p-8">
           <div className="text-center">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

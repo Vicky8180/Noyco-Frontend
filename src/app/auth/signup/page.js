@@ -1,6 +1,6 @@
 
 "use client";
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../../store/hooks';
 import { useRouter } from 'next/navigation';
 
@@ -24,7 +24,10 @@ export default function SignUpPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { registerUser, loading } = useAuth();
+  const { loginWithGoogle } = useAuth();
   const router = useRouter();
+  const googleBtnRef = useRef(null);
+  const [googleReady, setGoogleReady] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -129,6 +132,75 @@ export default function SignUpPage() {
       setIsSubmitting(false);
     }
   };
+
+  // Google Identity Services setup (allow signup via Google)
+  useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      console.warn('NEXT_PUBLIC_GOOGLE_CLIENT_ID not configured');
+      return;
+    }
+
+    const init = () => {
+      try {
+        /* global google */
+        if (window.google?.accounts?.id) {
+          window.google.accounts.id.initialize({
+            client_id: clientId,
+            callback: async (response) => {
+              try {
+                setError(''); // Clear any previous errors
+                setIsSubmitting(true);
+                const result = await loginWithGoogle(response.credential);
+                if (result.success) {
+                  const user = result.user;
+                  if (user?.role === 'admin') {
+                    router.push('/dashboard/admin');
+                  } else {
+                    router.push('/dashboard/individual');
+                  }
+                } else {
+                  setError(result.error || 'Google sign-in failed');
+                }
+              } catch (e) {
+                console.error('Google sign-in error:', e);
+                setError(e.message || 'Google sign-in failed. Please try again.');
+              } finally {
+                setIsSubmitting(false);
+              }
+            },
+          });
+          if (googleBtnRef.current) {
+            try {
+              window.google.accounts.id.renderButton(googleBtnRef.current, {
+                theme: 'outline',
+                size: 'large',
+                width: 360,
+                shape: 'rectangular',
+                logo_alignment: 'left',
+              });
+              setGoogleReady(true);
+            } catch (renderError) {
+              console.error('Google button render error:', renderError);
+            }
+          }
+        }
+      } catch (initError) {
+        console.error('Google Identity Services initialization error:', initError);
+      }
+    };
+
+    if (!window.google) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = init;
+      document.body.appendChild(script);
+    } else {
+      init();
+    }
+  }, [loginWithGoogle, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -250,6 +322,27 @@ export default function SignUpPage() {
                   <span>{error}</span>
                 </div>
               )}
+
+              {/* Google Sign-Up */}
+              <div className="mb-4">
+                <div ref={googleBtnRef} className="flex justify-center" />
+                {!googleReady && (
+                  <button
+                    type="button"
+                    onClick={() => { try { window.google?.accounts?.id?.prompt(); } catch {} }}
+                    disabled={isSubmitting || loading}
+                    className="w-full border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-5 h-5">
+                      <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12 c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C32.769,6.053,28.576,4,24,4C12.955,4,4,12.955,4,24 s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                      <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,16.108,18.961,14,24,14c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657 C32.769,6.053,28.576,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                      <path fill="#4CAF50" d="M24,44c4.522,0,8.646-1.732,11.77-4.565l-5.424-4.594C28.313,35.584,26.262,36,24,36 c-5.202,0-9.615-3.317-11.271-7.946l-6.5,5.017C9.551,39.556,16.227,44,24,44z"/>
+                      <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.027,5.557 c0.001-0.001,0.002-0.001,0.003-0.002l5.424,4.594C35.995,38.252,44,32,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    </svg>
+                    Continue with Google
+                  </button>
+                )}
+              </div>
 
               {/* Form Fields - Compact Layout */}
               <div className="space-y-4">

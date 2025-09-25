@@ -12,6 +12,10 @@ const MAX_REFRESH_RETRIES = 2; // Maximum number of refresh attempts
 // the same-origin proxy so that cookies are always sent.
 const BYPASS_PROXY_ENDPOINTS = [
   "/auth/login",
+  "/auth/google/login",
+  "/auth/me",
+  "/auth/refresh",
+  "/auth/logout",
   "/docs/",
 ];
 

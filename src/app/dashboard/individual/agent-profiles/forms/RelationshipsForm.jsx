@@ -173,7 +173,7 @@ const RelationshipsForm = ({ data = {}, updateData }) => {
                 <select
                   value={newLovedOne.relation}
                   onChange={(e) => setNewLovedOne(prev => ({ ...prev, relation: e.target.value }))}
-                  className="w-full px-3 py-2 border border-accent focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm bg-beige"
+                  className="w-full px-3 py-2 border-accent border-accent-top border-accent-left border-accent-right focus:ring-2 focus:ring-gray-400 focus:border-gray-400 text-sm bg-beige hover:bg-gradient-to-r hover:from-[#E6D3E7] hover:via-[#F6D9D5] hover:to-[#D6E3EC]"
                 >
                   <option value="">Select relationship</option>
                   {relationshipTypes.map((type) => (
@@ -217,7 +217,7 @@ const RelationshipsForm = ({ data = {}, updateData }) => {
                     console.log('DEBUG - Add memory button clicked');
                     addMemoryToNew();
                   }}
-                  className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="px-3 py-2 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 rounded-lg hover:shadow-md transition-colors"
                 >
                   <PlusIcon className="w-4 h-4" />
                 </button>
@@ -252,7 +252,7 @@ const RelationshipsForm = ({ data = {}, updateData }) => {
               <button
                 onClick={addLovedOne}
                 disabled={!newLovedOne.name.trim() || newLovedOne.memories.length === 0}
-                className="flex-1 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+                className="flex-1 px-3 py-2 bg-gradient-to-r from-[#E6D3E7] via-[#F6D9D5] to-[#D6E3EC] text-gray-800 rounded-lg hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
               >
                 Add Person {newLovedOne.memories.length === 0 && newLovedOne.name.trim() && "(Add at least one memory first)"}
               </button>
