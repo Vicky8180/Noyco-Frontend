@@ -217,20 +217,39 @@ export default function IndividualLayout({ children }) {
   useEffect(() => {
     const verifyOnboarding = async () => {
       if (!user?.role_entity_id) return;
+      
+      // Avoid checking onboarding if already on onboarding page
+      if (pathname === '/dashboard/individual/onboarding') return;
+      
+      // Avoid checking if user just completed onboarding (URL param check)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('onboarding') === 'completed') {
+        console.log('User just completed onboarding, skipping status check');
+        return;
+      }
 
       try {
         const data = await apiRequest('/auth/onboarding/status');
-        if (!data.onboarding_completed && pathname !== '/dashboard/individual/onboarding') {
+        console.log('Onboarding status check:', data);
+        
+        if (!data.onboarding_completed) {
+          console.log('Redirecting to onboarding...');
           setShowOnboarding(true);
           router.push('/dashboard/individual/onboarding');
+        } else {
+          console.log('Onboarding completed, user can access dashboard');
+          setShowOnboarding(false);
         }
       } catch (e) {
         console.error('Failed to fetch onboarding status', e);
+        // On error, don't redirect to avoid potential loops
       }
     };
 
-    verifyOnboarding();
-  }, [user?.role_entity_id, pathname]);
+    // Add a small delay to prevent rapid successive calls
+    const timeoutId = setTimeout(verifyOnboarding, 100);
+    return () => clearTimeout(timeoutId);
+  }, [user?.role_entity_id, pathname, router]);
 
   useEffect(() => {
     if (currentNavItem && currentNavItem.subItems.length > 0) {
