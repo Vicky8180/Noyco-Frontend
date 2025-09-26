@@ -18,8 +18,10 @@ export default function OnboardingPage() {
       if (!user?.role_entity_id) return;
       try {
         const data = await apiRequest('/auth/onboarding/status');
+        console.log('Onboarding page - checking status:', data);
         if (data.onboarding_completed) {
-          router.push('/dashboard/individual');
+          console.log('Onboarding already completed, redirecting to dashboard');
+          router.replace('/dashboard/individual?onboarding=completed');
         }
       } catch (e) {
         console.error('Failed to fetch onboarding status', e);
@@ -32,18 +34,25 @@ export default function OnboardingPage() {
     setIsCompleting(true);
     
     try {
+      console.log('Starting onboarding completion process...');
+      
       // Create the user profile
       const result = await createProfile(profileData);
       
       if (result.success) {
-        // Notify backend that onboarding completed
+        console.log('Profile created successfully:', result.data);
+        
+        // The backend now automatically marks onboarding as completed when profile is created
+        // But let's also try the explicit endpoint as a backup
         try {
           await apiRequest('/auth/onboarding/complete', { method: 'POST' });
+          console.log('Explicitly marked onboarding as complete');
         } catch (e) {
-          console.error('Failed to mark onboarding complete', e);
+          console.warn('Failed to explicitly mark onboarding complete (profile creation should have done this):', e);
         }
 
-        router.push('/dashboard/individual?onboarding=completed');
+        console.log('Redirecting to dashboard with completion flag...');
+        router.replace('/dashboard/individual?onboarding=completed');
       } else {
         console.error('Failed to create profile:', result.error);
         alert('Failed to save your profile. Please try again.');
